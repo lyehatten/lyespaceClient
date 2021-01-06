@@ -4,7 +4,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
+import {Link} from 'react-router-dom';
 
 const styles = {
     root: {
@@ -22,7 +22,7 @@ const styles = {
 
 
 class Nav extends React.Component<Props> {
-  constructor(props: any){
+  constructor(props: Props){
     super(props);
 
   }
@@ -35,19 +35,19 @@ class Nav extends React.Component<Props> {
     const {classes} = this.props
 
     return (
-      <div className={classes.root} >
-        <AppBar position="static">
+        <AppBar position="sticky" className={classes.root}>
           <Toolbar>
               <Typography className={classes.title}>
-                <Button color="inherit" type="button" href="/">
+                <Link to="/">
                   LyeSpace
-                </Button>
+                </Link>
               </Typography>
-            <Button color="inherit" href="/artists">View Artists</Button>
-            {this.props.token ? <Button color="inherit" onClick={e => this.clickLogout(e)}>Logout</Button> : <Button color="inherit" href="/login">Login</Button>}
+            <Link to="/artists">
+              <Button color="inherit" >View Artists</Button>
+            </Link>
+            {this.props.token ? <Button color="secondary" onClick={e => this.clickLogout(e)}>Logout</Button> : <Link to="/login"><Button color="inherit" >Login</Button></Link>}
           </Toolbar>
         </AppBar>
-      </div>
     )}
 }
 

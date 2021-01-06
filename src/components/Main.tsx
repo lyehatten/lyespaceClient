@@ -3,11 +3,14 @@ import Nav from './Nav';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import LoginRoute from './ViewConductors/LoginRoute';
 import HomeRoute from './ViewConductors/HomeRoute';
+import ViewArtists from './ViewArtists/ViewArtists';
+import ArtistRoute from './ViewConductors/ArtistRoute';
 
 type mainStates = {
     token: string | null,
     userId: string | null,
-    role: string | null
+    role: string | null,
+    artistView: string
 }
 
 class Main extends React.Component <{}, mainStates>{
@@ -17,7 +20,8 @@ class Main extends React.Component <{}, mainStates>{
         this.state = {
             token: null,
             userId: null,
-            role: null
+            role: null,
+            artistView: "1"
         }
     }
 
@@ -29,6 +33,10 @@ class Main extends React.Component <{}, mainStates>{
     updateUserId = (newUserId: string) => {
         this.setState({userId: newUserId})
         localStorage.setItem('userId', newUserId);
+    }
+
+    updateArtistView = (newArtistView: string) => {
+        this.setState({artistView: newArtistView})
     }
 
     updateRole = (newRole: string) => {
@@ -66,8 +74,10 @@ class Main extends React.Component <{}, mainStates>{
             <Router>
                 <Nav logout={this.logout} token={this.state.token}/>
                 <Switch>
-                    <Route exact path="/"><HomeRoute token={this.state.token}/></Route>
-                    <Route exact path="/login" ><LoginRoute token={this.state.token} updateToken={this.updateToken} updateUserId={this.updateUserId} updateRole={this.updateRole}/></Route>
+                    <Route exact path="/"><HomeRoute token={this.state.token} userId={this.state.userId}/></Route>
+                    <Route exact path="/artistview"><ArtistRoute token={this.state.token} userId={this.state.userId} artistView={this.state.artistView}/> </Route>
+                    <Route exact path="/artists"><ViewArtists updateArtistView={this.updateArtistView}/></Route>
+                    <Route exact path="/login" ><LoginRoute userId={this.state.userId} token={this.state.token} updateToken={this.updateToken} updateUserId={this.updateUserId} updateRole={this.updateRole}/></Route>
                 </Switch>
             </Router>
         </React.Fragment>
