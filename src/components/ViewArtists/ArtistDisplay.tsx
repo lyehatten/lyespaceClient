@@ -8,7 +8,6 @@ interface PropTypes {
 }
 
 const ArtistDisplay = (props: PropTypes) => {
-  console.log(props.artistInfo)
   return(
     <div>
       {props.artistInfo.map(artist => {return(
