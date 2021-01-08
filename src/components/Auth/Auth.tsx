@@ -79,6 +79,7 @@ class Auth extends React.Component<propTypes, authStates>{
         this.setState({message: "Email already in use!"}) 
     }
     }})
+    .then(data => window.location.reload(true))
     .catch( error => this.setState({message: `Error with connection. Please try again later!`}) )
   }   
     

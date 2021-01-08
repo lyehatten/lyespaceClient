@@ -4,9 +4,9 @@ import YourProfile from '../YourProfile/YourProfile';
 
 type PropTypes = {
   token: string | null,
-  userId: string | null
+  userId: string | null,
+  logout: Function
 }
-
 
 
 export default class HomeRoute extends React.Component<PropTypes, {} > {
@@ -14,7 +14,7 @@ export default class HomeRoute extends React.Component<PropTypes, {} > {
   render(){
     return(
       <div>
-        {this.props.token ? <YourProfile userId={this.props.userId}/> : <HomePage/> }
+        {this.props.token ? <YourProfile logout={this.props.logout} userId={this.props.userId}/> : <HomePage/> }
       </div>
     )
   }

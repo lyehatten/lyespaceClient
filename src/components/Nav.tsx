@@ -22,10 +22,6 @@ const styles = {
 
 
 class Nav extends React.Component<Props> {
-  constructor(props: Props){
-    super(props);
-
-  }
 
   clickLogout(e: React.MouseEvent){
     this.props.logout()

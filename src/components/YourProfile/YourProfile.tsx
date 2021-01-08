@@ -3,12 +3,18 @@ import React from 'react';
 import InfoCreate from './InfoCreate';
 import InfoDisplay from './InfoDisplay';
 import InfoEdit from './InfoEdit';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
 
 type Props = {
-  userId: string | null
+  userId: string | null,
+  logout: Function
 }
 
 type States = {
+  deleteState: boolean,
   firstName: string,
   lastName: string,
   profileData: {
@@ -20,13 +26,10 @@ type States = {
     instagram: string | null,
     facebook: string | null,
     bandcamp: string | null,
-    bandcampExamples: Array<string> | null,
     spotify: string | null,
-    spotifyExamples: Array<string> | null,
     youtube: string | null,
-    youtubeExamples: Array<string> | null,
     soundcloud: string | null,
-    soundcloudExamples: Array<string> | null
+    examples: string | null
   } | null,
   editView: boolean
 }
@@ -36,6 +39,7 @@ class YourProfile extends React.Component<Props, States> {
   constructor(props: Props){
     super(props);
     this.state = {
+      deleteState: false,
       firstName: "",
       lastName: "",
       profileData: null,
@@ -60,15 +64,60 @@ class YourProfile extends React.Component<Props, States> {
     })
   }
 
+  handleClickOpen = () => {
+    this.setState({ deleteState: true });
+  };
+
+  handleClose = () => {
+    this.setState({ deleteState: false });
+  };
+
+  handleDelete = () => {
+    fetch(`https://lyespace-server.herokuapp.com/user/removeSelf`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${localStorage.getItem('token')}`
+      }
+  })
+  .then(data => this.setState({ deleteState: false }))
+  .then(data => this.props.logout())
+  .then(data => window.location.reload())
+  .catch(error => console.log(error))
+  }
+
 
   render(){
     return(
       <div>
         <h1>{this.state.firstName} {this.state.lastName}</h1>
         {this.state.profileData ? this.state.editView ? <InfoEdit editToggle={this.editToggle} profileData={this.state.profileData}/> : 
-        <InfoDisplay editToggle={this.editToggle}/ > : this.state.editView ? <InfoCreate editToggle={this.editToggle}/> :
+        <InfoDisplay editToggle={this.editToggle} profileData={this.state.profileData}/ > : this.state.editView ? <InfoCreate editToggle={this.editToggle}/> :
         <><p>You have no profile data! Add some?</p> <Button onClick={this.editToggle} >Create Profile</Button></>
         }
+        <Button onClick={() => this.handleClickOpen()}>Delete Account</Button>
+        <Dialog
+          open={this.state.deleteState}
+          onClose={this.handleClose}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Are you sure you want to delete your account? 
+              <br/>
+              You will not be able to log back in and will need to sign up again.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={this.handleClose} color="primary">
+              Cancel
+            </Button>
+            <Button onClick={this.handleDelete} color="primary" autoFocus>
+              Delete Account
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     )
   }

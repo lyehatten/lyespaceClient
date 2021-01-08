@@ -1,4 +1,4 @@
-import { Button } from "@material-ui/core";
+
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
 import FacebookIcon from '@material-ui/icons/Facebook';
@@ -7,7 +7,6 @@ import Icon from '@material-ui/core/Icon';
 
 
 type propTypes = {
-  editToggle: Function,
   profileData: {
     stageName: string | null, 
     bio: string | null, 
@@ -24,7 +23,7 @@ type propTypes = {
   },
 }
 
-const InfoDisplay = (props: propTypes) => {
+const ViewOther = (props: propTypes) => {
 
   return(
     <div>
@@ -59,10 +58,9 @@ const InfoDisplay = (props: propTypes) => {
       {props.profileData.examples !== null ? <div className="content" dangerouslySetInnerHTML={{__html: props.profileData.examples}}></div> : undefined }
       
         
-      <Button onClick={() => {props.editToggle()}}>Edit Profile</Button>
     </div>
   )
 
 }
 
-export default InfoDisplay;
+export default ViewOther;

@@ -15,13 +15,10 @@ type States = {
   instagram: string,
   facebook: string,
   bandcamp: string,
-  bandcampExamples: string,
   spotify: string,
-  spotifyExamples: string,
   youtube: string,
-  youtubeExamples: string,
   soundcloud: string,
-  soundcloudExamples: string
+  examples: string
 }
 
 export default class InfoCreate extends React.Component<Props, States> {
@@ -36,13 +33,10 @@ export default class InfoCreate extends React.Component<Props, States> {
       instagram: "",
       facebook: "",
       bandcamp: "",
-      bandcampExamples: "",
       spotify: "",
-      spotifyExamples: "",
       youtube: "",
-      youtubeExamples: "",
       soundcloud: "",
-      soundcloudExamples: ""
+      examples: ""
     }
   }
 
@@ -52,6 +46,16 @@ export default class InfoCreate extends React.Component<Props, States> {
     } else {
       let newArray: Array<string> = string.split(",").map(item => item.trim() )
       return newArray
+    }
+  }
+
+  changeQuotes(string: string | null){
+    if(string ==="" || null){
+      return null
+    } else if (string === null){
+      return null
+    } else {
+      return string.replace(/'/g, '"');
     }
   }
 
@@ -81,18 +85,16 @@ export default class InfoCreate extends React.Component<Props, States> {
         instagram: this.checkState(this.state.instagram),
         facebook: this.checkState(this.state.facebook),
         bandcamp: this.checkState(this.state.bandcamp),
-        bandcampExamples: this.returnArray(this.state.bandcampExamples),
         spotify: this.checkState(this.state.spotify),
-        spotifyExamples: this.returnArray(this.state.spotifyExamples),
         youtube: this.checkState(this.state.youtube),
-        youtubeExamples: this.returnArray(this.state.youtubeExamples),
         soundcloud: this.checkState(this.state.soundcloud),
-        soundcloudExamples: this.returnArray(this.state.soundcloudExamples)
+        examples: this.changeQuotes(this.state.examples)
       })
     })
     .then(res => res.json())
     .then(data => console.log(data))
     .then(this.props.editToggle())
+    .then(data => window.location.reload())
     .catch( error => console.log(error))
   }
 
@@ -156,7 +158,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Twitter:"
+            label="Twitter Username:"
             id="twitter" 
             multiline={false}
             value={this.state.twitter} 
@@ -168,7 +170,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Instagram:"
+            label="Instagram Username:"
             id="instagram" 
             value={this.state.instagram} 
             variant="outlined"
@@ -179,7 +181,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Facebook Page:"
+            label="Facebook Page URL:"
             id="facebook" 
             value={this.state.facebook} 
             variant="outlined"
@@ -190,7 +192,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Bandcamp:"
+            label="Bandcamp Page URL:"
             id="bandcamp" 
             value={this.state.bandcamp} 
             variant="outlined"
@@ -201,21 +203,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Bandcamp Examples:"
-            id="bandcampExamples" 
-            rows={4}
-            multiline={true}
-            value={this.state.bandcampExamples} 
-            variant="outlined"
-            onChange={(event) => {                 
-            this.setState({bandcampExamples: event.target.value});  
-            }}
-          />
-          <p>List multiple Examples by separating with commas!</p>
-          <br/>
-          <br/>
-          <TextField 
-            label="Spotify: "
+            label="Spotify Artist Page URL: "
             id="spotify" 
             value={this.state.spotify} 
             variant="outlined"
@@ -226,21 +214,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Spotify Examples: "
-            id="spotifyExamples" 
-            rows={4}
-            multiline={true}
-            value={this.state.spotifyExamples} 
-            variant="outlined"
-            onChange={(event) => {                 
-            this.setState({spotifyExamples: event.target.value});  
-            }}
-          />
-          <p>List multiple examples by separating with commas!</p>
-          <br/>
-          <br/>
-          <TextField 
-            label="Youtube: "
+            label="Youtube Channel URL: "
             id="youtube" 
             value={this.state.youtube} 
             variant="outlined"
@@ -251,21 +225,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Youtube Examples: "
-            id="youtubeExamples" 
-            rows={4}
-            multiline={true}
-            value={this.state.youtubeExamples} 
-            variant="outlined"
-            onChange={(event) => {                 
-            this.setState({youtubeExamples: event.target.value});  
-            }}
-          />
-          <p>List multiple examples by separating with commas!</p>
-          <br/>
-          <br/>
-          <TextField 
-            label="Soundcloud: "
+            label="Soundcloud Page URL: "
             id="soundcloud" 
             value={this.state.soundcloud} 
             variant="outlined"
@@ -276,17 +236,16 @@ export default class InfoCreate extends React.Component<Props, States> {
           <br/>
           <br/>
           <TextField 
-            label="Soundcloud Examples: "
-            id="soundcloudExamples" 
-            rows={4}
+            label="Embedded Examples: "
+            id="examples" 
+            rows={6}
             multiline={true}
-            value={this.state.soundcloudExamples} 
+            value={this.state.examples} 
             variant="outlined"
             onChange={(event) => {                 
-            this.setState({soundcloudExamples: event.target.value});  
+            this.setState({examples: event.target.value});  
             }}
           />
-          <p>List multiple examples by separating with commas!</p>
           <br/>
           <br/>
           <Button variant="outlined" color="inherit" id="Submit" type="submit">Create Profile!</Button>
