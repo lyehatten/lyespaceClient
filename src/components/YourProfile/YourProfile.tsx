@@ -7,6 +7,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import Posts from './Posts/Posts';
 
 type Props = {
   userId: string | null,
@@ -31,6 +32,7 @@ type States = {
     soundcloud: string | null,
     examples: string | null
   } | null,
+  posts: Array<{id: number, post: string, createdAt: string}> | null,
   editView: boolean
 }
 
@@ -38,14 +40,17 @@ type States = {
 class YourProfile extends React.Component<Props, States> {
   constructor(props: Props){
     super(props);
+    this.refresh = this.refresh.bind(this);
     this.state = {
       deleteState: false,
       firstName: "",
       lastName: "",
       profileData: null,
-      editView: false
+      editView: false,
+      posts: null
     }
   }
+
 
 
   componentDidMount(){
@@ -54,9 +59,22 @@ class YourProfile extends React.Component<Props, States> {
     .then(data => this.setState({
       firstName: data.firstName,
       lastName: data.lastName,
-      profileData: data.profile
+      profileData: data.profile,
+      posts: data.posts
     }))
+    .catch(error => console.log(error))
   }
+
+
+  refresh(userId: string){
+    fetch(`https://lyespace-server.herokuapp.com/user/userInfo/${userId}`)
+    .then(res => res.json())
+    .then(data => this.setState({
+      posts: data.posts
+    }))
+    .catch(error => console.log(error))
+  }
+
 
   editToggle = () => {
     this.setState({
@@ -118,6 +136,7 @@ class YourProfile extends React.Component<Props, States> {
             </Button>
           </DialogActions>
         </Dialog>
+        <Posts posts={this.state.posts} refresh={this.refresh} userId={this.props.userId}/>
       </div>
     )
   }

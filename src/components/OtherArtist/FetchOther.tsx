@@ -1,6 +1,7 @@
 import React from "react";
 import ViewOther from "./ViewOther";
 import { Button } from "@material-ui/core";
+import ViewPosts from "./ViewPosts";
 
 
 type Props = {
@@ -27,6 +28,7 @@ type States = {
     soundcloud: string | null,
     examples: string | null
   } | null,
+  posts: Array<{id: number, post: string, createdAt: string}> | null
 }
 
 class FetchOther extends React.Component<Props, States> {  
@@ -36,8 +38,9 @@ class FetchOther extends React.Component<Props, States> {
     firstName: "",
     lastName: "",
     profileData: null,
-    role: ""
-  }
+    role: "",
+    posts: null
+    }
 }
 
 
@@ -48,7 +51,8 @@ componentDidMount(){
     firstName: data.firstName,
     lastName: data.lastName,
     profileData: data.profile,
-    role: data.userType
+    role: data.userType,
+    posts: data.posts
   }))
   .catch(err => console.log(err))
 }
@@ -77,6 +81,28 @@ componentDidMount(){
     .catch( error => console.log(error))
   }
 
+  adminRemovePost = (id: number) => {
+    fetch(`https://lyespace-server.herokuapp.com/posts/adminRemove/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `${localStorage.getItem('token')}`
+      }
+  })
+  .then(data => {
+    fetch(`https://lyespace-server.herokuapp.com/user/userInfo/${this.props.artistView}`)
+  .then(res => res.json())
+  .then(data => this.setState({
+    firstName: data.firstName,
+    lastName: data.lastName,
+    profileData: data.profile,
+    role: data.userType,
+    posts: data.posts
+  }))
+  .catch(err => console.log(err))
+  })
+  .catch(error => console.log(error))
+  }
 
   removeAdmin = () => {
     fetch(`https://lyespace-server.herokuapp.com/user/removeAdmin/${this.props.artistView}`, {
@@ -100,6 +126,7 @@ componentDidMount(){
         {this.state.profileData ? <ViewOther profileData={this.state.profileData}/ > : 
         <h4>User has no profile data!</h4>
         }
+        {this.state.posts ? <ViewPosts posts={this.state.posts} admin={this.props.role} adminRemovePost={this.adminRemovePost}/> : undefined}
         {this.props.role === "big boss" ? this.state.role === "bandmate" ? <div><Button onClick={() => {this.removeAdmin()}}>Remove Profile</Button></div> :
           <div>{this.state.role}<Button onClick={() => {this.promoteUser()}}>Promote to Bandmate</Button><Button onClick={() => {this.removeAdmin()}}>Remove Profile</Button></div> : undefined
         }

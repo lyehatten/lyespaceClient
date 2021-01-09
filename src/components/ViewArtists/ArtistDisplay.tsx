@@ -12,8 +12,9 @@ const ArtistDisplay = (props: PropTypes) => {
     <div>
       {props.artistInfo.map(artist => {return(
         <div key={artist.id}>
-          <h4>{artist.firstName} {artist.lastName} {artist.profile ? artist.profile.stageName ? <h4>aka {artist.profile.stageName}</h4> : 
-          undefined : undefined} </h4>
+          <h4>{artist.firstName} {artist.lastName}  </h4>
+          {artist.profile ? artist.profile.stageName ? <h4>aka {artist.profile.stageName}</h4> : 
+          undefined : undefined}
             <p>Genres: </p>
             {artist.profile ? artist.profile.genres ? artist.profile.genres.map(genre => <span key={genre}>{genre}</span>) : 
           <p>Artist has not added genres to profile.</p> : <p>Artist has not added genres to profile.</p>}

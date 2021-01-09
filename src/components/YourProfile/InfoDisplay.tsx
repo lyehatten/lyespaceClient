@@ -35,11 +35,11 @@ const InfoDisplay = (props: propTypes) => {
         </div> : undefined}
       {props.profileData.genres ? <div>
         <h4>Genres:</h4>
-        {props.profileData.genres.map(genre => <span> {genre} </span>)}
+        {props.profileData.genres.map(genre => <span key={genre}> {genre} </span>)}
         </div> : undefined }
       {props.profileData.instruments ? <div>
         <h4>Instruments: </h4>
-        {props.profileData.instruments.map(inst => <span> {inst} </span>)}
+        {props.profileData.instruments.map(inst => <span key={inst}> {inst} </span>)}
       </div> : undefined}
       {props.profileData.twitter || props.profileData.instagram || props.profileData.facebook ? 
       <h4>Socials:</h4> : undefined}
