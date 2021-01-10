@@ -7,7 +7,8 @@ type PropTypes = {
   userId: string | null,
   artistView: string,
   logout: Function,
-  role: string | null
+  role: string | null,
+  updateArtistView: Function
 }
 
 
@@ -17,7 +18,7 @@ export default class ArtistRoute extends React.Component<PropTypes, {} > {
   render(){
     return(
       <div>
-        {this.props.userId == this.props.artistView ? <YourProfile logout={this.props.logout} userId={this.props.userId}/> :  <FetchOther role={this.props.role} artistView={this.props.artistView}/>}
+        {this.props.userId == this.props.artistView ? <YourProfile logout={this.props.logout} userId={this.props.userId}/> :  <FetchOther updateArtistView={this.props.updateArtistView} role={this.props.role} artistView={this.props.artistView}/>}
       </div>
     )
   }

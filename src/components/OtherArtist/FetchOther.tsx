@@ -6,7 +6,8 @@ import ViewPosts from "./ViewPosts";
 
 type Props = {
   artistView: string,
-  role: string | null
+  role: string | null,
+  updateArtistView: Function
 }
 
 
@@ -28,7 +29,7 @@ type States = {
     soundcloud: string | null,
     examples: string | null
   } | null,
-  posts: Array<{id: number, post: string, createdAt: string}> | null
+  posts: Array<{id: number, post: string, createdAt: string}> | null,
 }
 
 class FetchOther extends React.Component<Props, States> {  
@@ -56,6 +57,11 @@ componentDidMount(){
   }))
   .catch(err => console.log(err))
 }
+
+componentWillUnmount(){
+  this.props.updateArtistView(1)
+}
+
 
   promoteUser = () => {
     fetch(`https://lyespace-server.herokuapp.com/user/role/${this.props.artistView}`, {
