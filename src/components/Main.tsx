@@ -99,25 +99,25 @@ class Main extends React.Component < Props, mainStates>{
         <div className={classes.setBackground}>
             <Router>
               <Nav logout={this.logout} token={this.state.token}/>
-          <div className={classes.wrapper} >
-              <Switch>
-                <Route exact path="/">
-                  <HomeRoute logout={this.logout} token={this.state.token} userId={this.state.userId}/>
-                </Route>
-                <Route exact path="/artistview">
-                  <ArtistRoute updateArtistView={this.updateArtistView} 
-                  logout={this.logout} token={this.state.token} userId={this.state.userId} 
-                  role={this.state.role} artistView={this.state.artistView}/> 
-                </Route>
-                <Route exact path="/artists">
-                  <ViewArtists updateArtistView={this.updateArtistView}/>
-                </Route>
-                <Route exact path="/login" >
-                  <LoginRoute logout={this.logout} userId={this.state.userId} token={this.state.token} 
-                  updateToken={this.updateToken} updateUserId={this.updateUserId} updateRole={this.updateRole}/>
-                </Route>
-              </Switch>
-          </div>
+              <div className={classes.wrapper}>
+                <Switch>
+                  <Route exact path="/">
+                    <HomeRoute logout={this.logout} token={this.state.token} userId={this.state.userId}/>
+                  </Route>
+                  <Route exact path="/artistview">
+                    <ArtistRoute updateArtistView={this.updateArtistView} 
+                    logout={this.logout} token={this.state.token} userId={this.state.userId} 
+                    role={this.state.role} artistView={this.state.artistView}/> 
+                  </Route>
+                  <Route exact path="/artists">
+                    <ViewArtists updateArtistView={this.updateArtistView}/>
+                  </Route>
+                  <Route exact path="/login" >
+                    <LoginRoute logout={this.logout} userId={this.state.userId} token={this.state.token} 
+                    updateToken={this.updateToken} updateUserId={this.updateUserId} updateRole={this.updateRole}/>
+                  </Route>
+                </Switch>
+              </div>
             </Router>
         </div>
     </React.Fragment>
