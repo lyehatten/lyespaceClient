@@ -9,9 +9,15 @@ import {Link} from 'react-router-dom';
 const styles = {
     root: {
       flexGrow: 1,
+      background: "#1A302D"
     },
     title: {
       flexGrow: 1,
+      fontSize: '1.3rem'
+    }, 
+    links: {
+      color: 'inherit',
+      textDecoration: "none",
     }
   }
 
@@ -33,15 +39,15 @@ class Nav extends React.Component<Props> {
     return (
         <AppBar position="sticky" className={classes.root}>
           <Toolbar>
-              <Typography className={classes.title}>
-                <Link to="/">
+              <Typography className={classes.title} >
+                <Link to="/" className={classes.links} >
                   LyeSpace
                 </Link>
               </Typography>
-            <Link to="/artists">
+            <Link to="/artists" className={classes.links}>
               <Button color="inherit" >View Artists</Button>
             </Link>
-            {this.props.token ? <Button color="secondary" onClick={e => this.clickLogout(e)}>Logout</Button> : <Link to="/login"><Button color="inherit" >Login</Button></Link>}
+            {this.props.token ? <Button color="inherit" onClick={e => this.clickLogout(e)}>Logout</Button> : <Link to="/login" className={classes.links}><Button color="inherit" >Login</Button></Link>}
           </Toolbar>
         </AppBar>
     )}
