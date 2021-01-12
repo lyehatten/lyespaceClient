@@ -11,10 +11,16 @@ type PropTypes = {
 
 export default class HomeRoute extends React.Component<PropTypes, {} > {
 
+//landing page vs your profile if you are logged in
+
   render(){
     return(
       <div>
-        {this.props.token ? <YourProfile logout={this.props.logout} userId={this.props.userId}/> : <HomePage/> }
+        {
+          this.props.token ? 
+          <YourProfile logout={this.props.logout} userId={this.props.userId}/> : 
+          <HomePage/> 
+        }
       </div>
     )
   }

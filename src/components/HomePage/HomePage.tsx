@@ -64,14 +64,21 @@ class HomePage extends React.Component<Props> {
       </Typography>
       <hr/>
       <div className={classes.page}>
-        <Typography variant="h3" gutterBottom={true} display="inline">I'm Levi </Typography>
-        <Typography display="inline" gutterBottom={true} variant="subtitle2"> (or lye).</Typography>
-        <Typography variant="h6" align="center" color="textSecondary" gutterBottom={true} >Call me whatever.</Typography>
+        <Typography variant="h3" gutterBottom={true} display="inline">
+          I'm Levi 
+        </Typography>
+        <Typography display="inline" gutterBottom={true} 
+        variant="subtitle2"> (or lye).</Typography>
+        <Typography variant="h6" align="center" color="textSecondary" gutterBottom={true}>
+          Call me whatever.
+        </Typography>
         <Typography variant="h5" gutterBottom={true} align="right" className={classes.leftmargin} >
           I'm always looking for 
           <br/>folks to make music with.
         </Typography>
-        <Typography className={classes.pals} align="center" variant="h4" color="primary">I made LyeSpace to find pals to make some cool noise with! </Typography>
+        <Typography className={classes.pals} align="center" variant="h4" color="primary">
+          I made LyeSpace to find pals to make some cool noise with! 
+        </Typography>
         <Typography gutterBottom={true} className={classes.tagline} variant="h5">
           Here at LyeSpace you can make a profile with information about your music, 
           links to your social media, and embed examples of the stuff you have created!
@@ -81,7 +88,9 @@ class HomePage extends React.Component<Props> {
             Interested in checking <br/>out my profile?
             <br/>
             <Link className={classes.links} to="/artistview"> 
-              <Button variant="contained" color="primary" className={classes.btnOne}>My Profile</Button> 
+              <Button variant="contained" color="primary" className={classes.btnOne}>
+                My Profile
+              </Button> 
             </Link>
             <br/>
             If you like what you see, 
@@ -98,7 +107,8 @@ class HomePage extends React.Component<Props> {
             </Link>
           </Typography>
         </Box>
-        <Typography align="right" variant="h5" color="textSecondary" gutterBottom={true} >
+        <Typography align="right" variant="h5" 
+        color="textSecondary" gutterBottom={true} >
           I hope you join so 
           <br/>
           that I can check

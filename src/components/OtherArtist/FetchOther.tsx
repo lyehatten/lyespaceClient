@@ -2,10 +2,22 @@ import React from "react";
 import ViewOther from "./ViewOther";
 import { Button } from "@material-ui/core";
 import ViewPosts from "./ViewPosts";
+import { withStyles, WithStyles } from "@material-ui/core/styles";
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+
+const styles = {
+  root: {
+    marginTop: '30px'
+  },
+  btnTwo: {
+    marginLeft: '15px'
+  }
+}
 
 
-type Props = {
-  artistView: string,
+interface Props extends WithStyles<typeof styles> {
+    artistView: string,
   role: string | null,
   updateArtistView: Function
 }
@@ -36,8 +48,8 @@ class FetchOther extends React.Component<Props, States> {
   constructor(props: Props){
   super(props);
   this.state = {
-    firstName: "",
-    lastName: "",
+    firstName: "Currently",
+    lastName: "Loading...",
     profileData: null,
     role: "",
     posts: null
@@ -125,23 +137,62 @@ componentWillUnmount(){
   }
 
   render(){
-    
+    const {classes} = this.props
     return(
-      <div>
-        <h1>{this.state.firstName} {this.state.lastName}</h1>
-        {this.state.profileData ? <ViewOther profileData={this.state.profileData}/ > : 
-        <h4>User has no profile data!</h4>
+      <div className={classes.root}>
+        <Typography display="inline" variant="h2">
+          {this.state.firstName} {this.state.lastName}
+        </Typography>
+        { 
+          this.state.profileData ? 
+          <ViewOther profileData={this.state.profileData}/ > : 
+          <h4>User has no profile data!</h4>
         }
-        {this.state.posts ? <ViewPosts posts={this.state.posts} admin={this.props.role} adminRemovePost={this.adminRemovePost}/> : undefined}
-        {this.props.role === "big boss" ? this.state.role === "bandmate" ? <div><Button onClick={() => {this.removeAdmin()}}>Remove Profile</Button></div> :
-          <div>{this.state.role}<Button onClick={() => {this.promoteUser()}}>Promote to Bandmate</Button><Button onClick={() => {this.removeAdmin()}}>Remove Profile</Button></div> : undefined
+        {
+          this.props.role === "big boss" ? 
+          this.state.role === "bandmate" ? 
+          <div>
+            <Button variant="contained" color="primary" 
+            onClick={() => {this.removeAdmin()}}>
+              Remove Profile
+            </Button>
+          </div> :
+          <div>  
+            <Typography variant="subtitle1"> 
+            User Role: <br/> {this.state.role}
+            </Typography>
+            <br/>
+            <Button variant="contained" color="primary" 
+             onClick={() => {this.promoteUser()}}>
+              Promote to Bandmate
+            </Button>
+            <Button variant="contained" color="primary"
+            className={classes.btnTwo}
+            onClick={() => {this.removeAdmin()}}>
+              Remove Profile
+            </Button>
+          </div> : 
+          undefined
         }
         {this.props.role === "bandmate" ? 
-          <Button onClick={() => {this.removeAdmin()}} >Remove Profile</Button> : undefined
+          <Button variant="contained" color="primary" 
+          onClick={() => {this.removeAdmin()}}>
+            Remove Profile
+          </Button> : undefined
+        }
+        {
+          this.state.posts ? 
+          <div>
+            <br/>
+            <br/>
+          <Divider/>
+            <ViewPosts posts={this.state.posts} admin={this.props.role} 
+            adminRemovePost={this.adminRemovePost}/> 
+          </div>: undefined
         }
       </div>
     )
   }
 }
 
-export default FetchOther;
+export default withStyles(styles)(FetchOther);

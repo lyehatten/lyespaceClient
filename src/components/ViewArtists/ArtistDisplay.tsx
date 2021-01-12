@@ -29,7 +29,15 @@ const styles = {
 }
 
 interface PropTypes extends WithStyles<typeof styles> {
-  artistInfo: Array<{firstName: string, lastName: string, profile: {stageName: string | null, genres: Array<string> | null, instruments: Array<string>} | null, id: number}>,
+  artistInfo: Array<{
+    firstName: string, 
+    lastName: string, 
+    profile: {
+      stageName: string | null, 
+      genres: Array<string> | null, 
+      instruments: Array<string>} | null, 
+      id: number
+    }>,
   updateArtistView: (newArtistView: string) => void
 }
 
@@ -63,22 +71,32 @@ const ArtistDisplay = (props: PropTypes) => {
           <Typography variant="h5" >Genres: </Typography>
             {
               artist.profile ? artist.profile.genres ? 
-              artist.profile.genres.map(genre => <Typography className={classes.tags} variant="overline" key={genre}>
+              artist.profile.genres.map(genre => <Typography className={classes.tags} 
+              variant="overline" key={genre}>
                 {genre}
               </Typography>) : 
-              <Typography variant="overline">Artist has not added <br/> genres to profile.</Typography> : 
-              <Typography variant="overline">Artist has not added <br/> genres to profile.</Typography>
+              <Typography variant="overline">
+                Artist has not added <br/> genres to profile.
+              </Typography> : 
+              <Typography variant="overline">
+                Artist has not added <br/> genres to profile.
+              </Typography>
             }
           </Box>
           <Box textAlign="center" className={classes.tagBox}>
             <Typography variant="h5" >Instruments:   </Typography>
             {
               artist.profile ? artist.profile.instruments ? 
-              artist.profile.instruments.map(instrument => <Typography className={classes.tags}  variant="overline" key={instrument}>
+              artist.profile.instruments.map(instrument => <Typography className={classes.tags}  
+              variant="overline" key={instrument}>
                 {instrument} 
               </Typography>) : 
-              <Typography variant="overline">Artist has not added <br/> instruments to profile.</Typography> : 
-              <Typography variant="overline">Artist has not added <br/> instruments to profile.</Typography>
+              <Typography variant="overline">
+                Artist has not added <br/> instruments to profile.
+              </Typography> : 
+              <Typography variant="overline">
+                Artist has not added <br/> instruments to profile.
+              </Typography>
             }
             <br/>
           </Box>

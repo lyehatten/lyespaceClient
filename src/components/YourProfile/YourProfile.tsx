@@ -8,8 +8,20 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Posts from './Posts/Posts';
+import { withStyles, WithStyles } from "@material-ui/core/styles";
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
-type Props = {
+const styles = {
+  root: {
+    marginTop: '30px'
+  },
+  btnTwo: {
+    marginLeft: '15px'
+  }
+}
+
+interface Props extends WithStyles<typeof styles> {
   userId: string | null,
   logout: Function
 }
@@ -106,14 +118,24 @@ class YourProfile extends React.Component<Props, States> {
 
 
   render(){
+    const {classes} = this.props
     return(
-      <div>
-        <h1>{this.state.firstName} {this.state.lastName}</h1>
-        {this.state.profileData ? this.state.editView ? <InfoEdit editToggle={this.editToggle} profileData={this.state.profileData}/> : 
-        <InfoDisplay editToggle={this.editToggle} profileData={this.state.profileData}/ > : this.state.editView ? <InfoCreate editToggle={this.editToggle}/> :
-        <><p>You have no profile data! Add some?</p> <Button onClick={this.editToggle} >Create Profile</Button></>
+      <div className={classes.root}>
+        <Typography display="inline" variant="h2">
+          {this.state.firstName} {this.state.lastName}
+        </Typography>
+        {
+          this.state.profileData ? this.state.editView ? 
+          <InfoEdit editToggle={this.editToggle} profileData={this.state.profileData}/> : 
+          <InfoDisplay editToggle={this.editToggle} profileData={this.state.profileData}/ > : 
+          this.state.editView ? <InfoCreate editToggle={this.editToggle}/> :
+          <div>
+            <Typography>You have no profile data! Add some?</Typography> 
+            <Button onClick={this.editToggle} >Create Profile</Button>
+          </div>
         }
-        <Button onClick={() => this.handleClickOpen()}>Delete Account</Button>
+        <Button variant="contained" color="secondary" className={classes.btnTwo}
+        onClick={() => this.handleClickOpen()}>Delete Account</Button>
         <Dialog
           open={this.state.deleteState}
           onClose={this.handleClose}
@@ -121,7 +143,7 @@ class YourProfile extends React.Component<Props, States> {
           aria-describedby="alert-dialog-description"
         >
           <DialogContent>
-            <DialogContentText id="alert-dialog-description">
+            <DialogContentText align="center" id="alert-dialog-description">
               Are you sure you want to delete your account? 
               <br/>
               You will not be able to log back in and will need to sign up again.
@@ -131,11 +153,14 @@ class YourProfile extends React.Component<Props, States> {
             <Button onClick={this.handleClose} color="primary">
               Cancel
             </Button>
-            <Button onClick={this.handleDelete} color="primary" autoFocus>
+            <Button onClick={this.handleDelete} color="secondary" autoFocus>
               Delete Account
             </Button>
           </DialogActions>
         </Dialog>
+        <br/>
+        <br/>
+        <Divider/>
         <Posts posts={this.state.posts} refresh={this.refresh} userId={this.props.userId}/>
       </div>
     )
@@ -143,4 +168,4 @@ class YourProfile extends React.Component<Props, States> {
 
 }
 
-export default YourProfile;
+export default withStyles(styles)(YourProfile);

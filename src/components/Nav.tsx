@@ -47,7 +47,11 @@ class Nav extends React.Component<Props> {
             <Link to="/artists" className={classes.links}>
               <Button color="inherit" >View Artists</Button>
             </Link>
-            {this.props.token ? <Button color="inherit" onClick={e => this.clickLogout(e)}>Logout</Button> : <Link to="/login" className={classes.links}><Button color="inherit" >Login</Button></Link>}
+            {this.props.token ? <Button color="inherit" 
+            onClick={e => this.clickLogout(e)}>Logout</Button> : 
+            <Link to="/login" className={classes.links}>
+              <Button color="inherit" >Login</Button>
+            </Link>}
           </Toolbar>
         </AppBar>
     )}
