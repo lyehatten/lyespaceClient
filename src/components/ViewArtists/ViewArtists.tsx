@@ -1,13 +1,31 @@
 import React from 'react';
 import ArtistDisplay from './ArtistDisplay';
+import { withStyles, WithStyles } from "@material-ui/core/styles";
+import Typography from '@material-ui/core/Typography';
 
-type Props = {
-  updateArtistView: Function
+const styles = {
+  root: {
+    margin: '25px'
+  }
+}
+
+interface Props extends WithStyles<typeof styles> {
+  updateArtistView: (newArtistView: string) => void
 }
 
 type States = {
-  artistInfo: Array<{firstName: string, lastName: string, profile: {stageName: string | null, genres: Array<string> | null, instruments: Array<string>} | null, id: number}>
+  artistInfo: Array<{
+    firstName: string, 
+    lastName: string, 
+    profile: {
+      stageName: string | null, 
+      genres: Array<string> | null, 
+      instruments: Array<string>
+    } | null, 
+    id: number
+  }>
 }
+
 
 
 class ViewArtists extends React.Component<Props, States> {
@@ -25,14 +43,18 @@ class ViewArtists extends React.Component<Props, States> {
   }
 
   render(){
+    const {classes} = this.props
     return(
       <div>
-        <h1>All Artist Profiles:</h1>
-        <ArtistDisplay artistInfo={this.state.artistInfo} updateArtistView={this.props.updateArtistView}/>
+        <Typography className={classes.root} variant="h2">
+          All Artist Profiles:
+        </Typography>
+        <ArtistDisplay artistInfo={this.state.artistInfo} 
+        updateArtistView={this.props.updateArtistView}/>
       </div>
     )
   }
 }
 
 
-export default ViewArtists;
+export default withStyles(styles)(ViewArtists);
