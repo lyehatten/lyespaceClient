@@ -137,7 +137,7 @@ componentWillUnmount(){
           <div>{this.state.role}<Button onClick={() => {this.promoteUser()}}>Promote to Bandmate</Button><Button onClick={() => {this.removeAdmin()}}>Remove Profile</Button></div> : undefined
         }
         {this.props.role === "bandmate" ? 
-          <Button>Remove Profile</Button> : undefined
+          <Button onClick={() => {this.removeAdmin()}} >Remove Profile</Button> : undefined
         }
       </div>
     )
