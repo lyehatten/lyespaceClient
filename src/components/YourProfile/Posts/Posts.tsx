@@ -1,8 +1,16 @@
 import React from 'react';
 import CreatePost from './CreatePost';
 import ViewPosts from './ViewPosts';
+import Typography from '@material-ui/core/Typography';
+import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-type Props = {
+const styles = {
+  root: {
+    margin: '10px'
+  }
+}
+
+interface Props extends WithStyles<typeof styles>  {
   posts: Array<{id: number, post: string, createdAt: string}> | null,
   userId: string | null,
   refresh: Function
@@ -12,8 +20,11 @@ type Props = {
 class Posts extends React.Component <Props>{
 
   render(){
+    const {classes} = this.props
     return(
-      <div>
+      <div className={classes.root}>
+        <br/>
+        <Typography variant="h3">Posts: </Typography>
         <CreatePost refresh={this.props.refresh} userId={this.props.userId}/>
         <br/>
         <br/>
@@ -25,4 +36,4 @@ class Posts extends React.Component <Props>{
 
 }
 
-export default Posts;
+export default withStyles(styles)(Posts);

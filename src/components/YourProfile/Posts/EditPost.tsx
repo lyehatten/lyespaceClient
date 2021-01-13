@@ -1,7 +1,14 @@
 import { Button, TextField } from '@material-ui/core';
 import React from 'react';
+import { withStyles, WithStyles } from "@material-ui/core/styles";
 
-type Props = {
+const styles = {
+  field: {
+    width: '100%'
+  }
+}
+
+interface Props extends WithStyles<typeof styles>  {
   post: {
     id: number,
     post: string,
@@ -45,12 +52,13 @@ class EditPost extends React.Component<Props, States> {
 
 
   render(){
+    const {classes} = this.props
     return(
       <div>
         <form onSubmit={this.HandleSubmit}>
           <div key={this.props.post.id}>
-            <TextField 
-              label="Edit:"
+            <TextField className={classes.field}
+              label="Edit Post:"
               value={this.state.post} 
               variant="outlined"
               multiline={true}
@@ -58,8 +66,11 @@ class EditPost extends React.Component<Props, States> {
               this.setState({post: event.target.value});  
               }}
             />
+            <br/>
+            <Button color="primary" type="submit">Save</Button>
+            <br/>
+            <br/>
             { this.props.post.createdAt.slice(0, 10)}
-            <Button type="submit">Save</Button>
         </div>
       </form>
       </div>
@@ -67,4 +78,4 @@ class EditPost extends React.Component<Props, States> {
   }
 }
 
-export default EditPost;
+export default withStyles(styles)(EditPost);

@@ -84,7 +84,14 @@ class Auth extends React.Component<propTypes, authStates>{
     event.preventDefault();
         
     const url = this.state.login ? `https://lyespace-server.herokuapp.com/user/login` : `https://lyespace-server.herokuapp.com/user/register`;  
-    const bodyObj = this.state.login ? { email: this.state.email, password: this.state.password} : { email: this.state.email, password: this.state.password, firstName: this.state.firstName, lastName: this.state.lastName, userType: "musician"}
+    const bodyObj = this.state.login ? { 
+      email: this.state.email, 
+      password: this.state.password} : 
+      { email: this.state.email, 
+        password: this.state.password, 
+        firstName: this.state.firstName, 
+        lastName: this.state.lastName, 
+        userType: "musician"}
         
     fetch(url, {
       method: 'POST',
@@ -115,7 +122,8 @@ class Auth extends React.Component<propTypes, authStates>{
     const {classes} = this.props
   return (
     <div className={classes.root}>
-      <Typography variant="h2" align='center' id="header" className={classes.title} > 
+      <Typography variant="h2" align='center' 
+      id="header" className={classes.title} > 
       {this.title()} 
       </Typography> 
       <form onSubmit={this.HandleSubmit}>    

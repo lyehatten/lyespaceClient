@@ -1,8 +1,19 @@
 import { Button } from '@material-ui/core'
 import React from 'react'
 import EditPost from './EditPost'
+import { withStyles, WithStyles } from "@material-ui/core/styles";
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
 
-type Props = {
+const styles = {
+  posts: {
+    padding: '20px',
+    margin: '10px',
+    borderRadius: '2px'
+  },
+}
+
+interface Props extends WithStyles<typeof styles> {
   post: {
     id: number,
     post: string,
@@ -44,19 +55,36 @@ class ViewPost extends React.Component <Props, States> {
   }
 
   render(){
-  return(
-    <div>
-      {this.state.editToggle ? <EditPost userId={this.props.userId} toggleEdit={this.toggleEdit} post={this.props.post} refresh={this.props.refresh} /> :
-      <div key={this.props.post.id}>
-        <p>{this.props.post.post}</p>
-        { this.props.post.createdAt.slice(0, 10)}
-      </div>
-      }
-
-    <Button onClick={() => this.toggleEdit()}>{this.state.editToggle ? <p>Cancel</p>: <p>Edit</p>}</Button>
-    <Button onClick={() => this.deletePost(this.props.post.id)}>Delete</Button>
-    </div>
-  )}
+    const {classes} = this.props
+    return(
+      <Box bgcolor="background.paper" 
+      borderColor='text.secondary' border={1} 
+      className={classes.posts}>
+        {
+          this.state.editToggle ? 
+          <EditPost userId={this.props.userId} 
+          toggleEdit={this.toggleEdit} post={this.props.post} 
+          refresh={this.props.refresh} /> :
+          <div key={this.props.post.id}>
+            <Typography variant="body1" paragraph={true}>
+              {this.props.post.post}
+            </Typography>
+            <Typography variant="overline">
+              DATE: { this.props.post.createdAt.slice(0, 10)}
+            </Typography>
+          </div>
+        }
+      <Button color="secondary" variant="contained"
+      onClick={() => this.toggleEdit()}>
+        {
+        this.state.editToggle ? 
+        <>Cancel</>: <>Edit</>}
+      </Button>
+      <Button color="primary" 
+      onClick={() => this.deletePost(this.props.post.id)}>
+        Delete</Button>
+      </Box>
+    )}
 }
 
-export default ViewPost
+export default withStyles(styles)(ViewPost)

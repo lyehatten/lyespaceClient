@@ -1,7 +1,21 @@
 import { Button, TextField } from '@material-ui/core';
 import React from 'react';
+import { withStyles, WithStyles } from "@material-ui/core/styles";
+import Box from '@material-ui/core/Box';
 
-type Props ={
+const styles = {
+  posts: {
+    padding: '20px',
+    margin: '10px',
+    borderRadius: '2px'
+  },
+  field: {
+    width: '100%'
+  }
+}
+
+
+interface Props extends WithStyles<typeof styles> {
   refresh: Function,
   userId: string | null,
 }
@@ -40,25 +54,34 @@ class CreatePost extends React.Component <Props,States>{
 
 
   render(){
+    const {classes} = this.props
     return(
-      <div>
+      <Box bgcolor="background.paper" 
+      borderColor='text.secondary' border={1} 
+      className={classes.posts}>
         <form onSubmit={this.HandleSubmit}>
-        <TextField 
-            label="Post:"
+        <TextField className={classes.field}
+            label="New Post:"
             id="post" 
             value={this.state.post} 
+            multiline={true}
             variant="outlined"
             onChange={(event) => {                 
             this.setState({post: event.target.value});  
             }}
           />
-          <Button variant="outlined" color="inherit" id="Submit" type="submit">Post!</Button>
+          <br/>
+          <br/>
+          <Button variant="outlined" color="inherit" 
+          id="Submit" type="submit">
+            Post!
+          </Button>
         </form>
-      </div>
+      </Box>
     )
   }
 
 
 }
 
-export default CreatePost;
+export default withStyles(styles)(CreatePost);
