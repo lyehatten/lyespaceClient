@@ -41,7 +41,7 @@ type States = {
     soundcloud: string | null,
     examples: string | null
   } | null,
-  posts: Array<{id: number, post: string, createdAt: string}> | null,
+  posts: Array<{id: number, post: string, createdAt: string}>,
 }
 
 class FetchOther extends React.Component<Props, States> {  
@@ -52,7 +52,7 @@ class FetchOther extends React.Component<Props, States> {
     lastName: "Loading...",
     profileData: null,
     role: "",
-    posts: null
+    posts: []
     }
 }
 
@@ -162,11 +162,11 @@ componentWillUnmount(){
             User Role: <br/> {this.state.role}
             </Typography>
             <br/>
-            <Button variant="contained" color="primary" 
+            <Button variant="contained" color="secondary" 
              onClick={() => {this.promoteUser()}}>
               Promote to Bandmate
             </Button>
-            <Button variant="contained" color="primary"
+            <Button variant="outlined" color="primary"
             className={classes.btnTwo}
             onClick={() => {this.removeAdmin()}}>
               Remove Profile
@@ -175,13 +175,12 @@ componentWillUnmount(){
           undefined
         }
         {this.props.role === "bandmate" ? 
-          <Button variant="contained" color="primary" 
-          onClick={() => {this.removeAdmin()}}>
+          <Button variant="contained" color="primary" onClick={() => {this.removeAdmin()}}>
             Remove Profile
           </Button> : undefined
         }
         {
-          this.state.posts ? 
+          this.state.posts.length > 0 ? 
           <div>
             <br/>
             <br/>

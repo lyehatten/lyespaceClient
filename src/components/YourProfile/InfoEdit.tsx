@@ -1,9 +1,34 @@
 import TextField from '@material-ui/core/TextField';
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import { withStyles, WithStyles } from "@material-ui/core/styles";
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
 
-type Props = {
-  editToggle: Function,
+const styles = {
+  root: {
+    margin: '10px'
+  },
+  inputs: {
+    width: '70%',
+    marginLeft: '15%',
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  socials: {
+    width: "49%"
+  },
+  buttons: {
+    width: '30%',
+    marginLeft: '35%',
+    display: 'flex',
+    justifyContent: 'space-between'
+  }
+}
+
+
+interface Props extends WithStyles<typeof styles> {
+  editToggle: () => void,
   profileData: {
     stageName: string | null, 
     bio: string | null, 
@@ -35,7 +60,7 @@ type States = {
   examples: string
 }
 
-export default class InfoCreate extends React.Component<Props, States> {
+class InfoEdit extends React.Component<Props, States> {
   constructor(props: Props){
     super(props);
     this.state = {
@@ -113,12 +138,20 @@ export default class InfoCreate extends React.Component<Props, States> {
 
 
   render(){
+    const {classes} = this.props
       return(
-      <div>
-        <h3>Edit profile information!</h3>
-        <h5>Add as little or as much as you please.</h5>
+      <div className={classes.root}>
+        <Divider/>
+        <br/>
+        <Typography variant="h4" align="center">
+          Edit profile information!
+        </Typography>
+        <Typography variant="subtitle1" align="center">
+          Add as little or as much as you please.
+        </Typography>
         <form onSubmit={this.HandleSubmit}>
-        <TextField 
+        <TextField className={classes.inputs}
+            margin="normal"
             label="Stage Name:"
             id="stageName" 
             value={this.state.stageName} 
@@ -129,7 +162,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Bio:"
             id="bio" 
             rows={4}
@@ -142,7 +175,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Genres:"
             id="genres" 
             rows={2}
@@ -153,10 +186,12 @@ export default class InfoCreate extends React.Component<Props, States> {
             this.setState({genres: event.target.value});  
             }}
           />
-          <p>List multiple genres by separating with commas!</p>
+          <Typography variant="subtitle2" align="center">
+            List multiple genres by separating with commas!
+          </Typography>
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Instruments: "
             id="instruments" 
             rows={2}
@@ -167,33 +202,35 @@ export default class InfoCreate extends React.Component<Props, States> {
             this.setState({instruments: event.target.value});  
             }}
           />
-          <p>List multiple instruments by separating with commas!</p>
+          <Typography variant="subtitle2" align="center">
+            List multiple instruments by separating with commas!
+          </Typography>
           <br/>
           <br/>
-          <TextField 
-            label="Twitter Username:"
-            id="twitter" 
-            multiline={false}
-            value={this.state.twitter} 
-            variant="outlined"
-            onChange={(event) => {                 
-            this.setState({twitter: event.target.value});  
-            }}
-          />
+          <div className={classes.inputs}>
+            <TextField className={classes.socials}
+              label="Twitter Username:"
+              id="twitter" 
+              multiline={false}
+              value={this.state.twitter} 
+              variant="outlined"
+              onChange={(event) => {                 
+              this.setState({twitter: event.target.value});  
+              }}
+            />
+            <TextField className={classes.socials}
+              label="Instagram Username:"
+              id="instagram" 
+              value={this.state.instagram} 
+              variant="outlined"
+              onChange={(event) => {                 
+              this.setState({instagram: event.target.value});  
+              }}
+            />
+          </div>
           <br/>
           <br/>
-          <TextField 
-            label="Instagram Username:"
-            id="instagram" 
-            value={this.state.instagram} 
-            variant="outlined"
-            onChange={(event) => {                 
-            this.setState({instagram: event.target.value});  
-            }}
-          />
-          <br/>
-          <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Facebook Page URL:"
             id="facebook" 
             value={this.state.facebook} 
@@ -204,7 +241,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Bandcamp Page URL:"
             id="bandcamp" 
             value={this.state.bandcamp} 
@@ -215,7 +252,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Spotify Artist Page URL: "
             id="spotify" 
             value={this.state.spotify} 
@@ -226,7 +263,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Youtube Channel URL: "
             id="youtube" 
             value={this.state.youtube} 
@@ -237,7 +274,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Soundcloud Page URL: "
             id="soundcloud" 
             value={this.state.soundcloud} 
@@ -248,7 +285,7 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <TextField 
+          <TextField className={classes.inputs}
             label="Embedded Examples: "
             id="examples" 
             rows={6}
@@ -261,9 +298,19 @@ export default class InfoCreate extends React.Component<Props, States> {
           />
           <br/>
           <br/>
-          <Button variant="outlined" color="inherit" id="Submit" type="submit">SAVE</Button><Button variant="outlined" color="inherit" id="Cancel" onClick={() => {this.props.editToggle()}}>Cancel</Button>
+          <div className={classes.buttons}>
+            <Button variant="contained" color="primary" id="Cancel" 
+            onClick={() => {this.props.editToggle()}}>
+              Cancel
+            </Button>
+            <Button variant="contained" color="secondary" id="Submit" type="submit">
+              SAVE
+            </Button>
+          </div>
         </form>
       </div>
     )
   }
 }
+
+export default withStyles(styles)(InfoEdit);

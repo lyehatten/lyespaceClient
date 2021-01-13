@@ -18,6 +18,11 @@ const styles = {
   },
   btnTwo: {
     marginLeft: '15px'
+  },
+  createStuff: {
+    display: 'flex',
+    flexFlow: 'column wrap',
+    alignContent: 'center'
   }
 }
 
@@ -130,11 +135,21 @@ class YourProfile extends React.Component<Props, States> {
           <InfoDisplay editToggle={this.editToggle} profileData={this.state.profileData}/ > : 
           this.state.editView ? <InfoCreate editToggle={this.editToggle}/> :
           <div>
-            <Typography>You have no profile data! Add some?</Typography> 
-            <Button onClick={this.editToggle} >Create Profile</Button>
+            <Divider/>
+            <div className={classes.createStuff}>
+              <br/>
+              <Typography variant="h5">You have no profile data! Add some?</Typography> 
+              <br/>
+              <Button className={classes.btnTwo} variant='contained'
+              color="secondary" onClick={this.editToggle}>
+                Create Profile
+              </Button>
+              <br/>
+              <br/>
+            </div>
           </div>
         }
-        <Button variant="contained" color="secondary" className={classes.btnTwo}
+        <Button variant="outlined" color="secondary" className={classes.btnTwo}
         onClick={() => this.handleClickOpen()}>Delete Account</Button>
         <Dialog
           open={this.state.deleteState}

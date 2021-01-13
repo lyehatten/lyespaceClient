@@ -4,9 +4,9 @@ import YourProfile from '../YourProfile/YourProfile';
 
 type PropTypes = {
   token: string | null,
-  updateToken: Function,
-  updateUserId: Function,
-  updateRole: Function,
+  updateToken: (newToken: string) => void,
+  updateUserId: (newUserId: string) => void,
+  updateRole: (newRole: string) => void,
   userId: string | null,
   logout: Function
 }
