@@ -35,7 +35,7 @@ class EditPost extends React.Component<Props, States> {
   HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
         
-    fetch(`https://lyespace-server.herokuapp.com/posts/edit/${this.props.post.id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/posts/edit/${this.props.post.id}`, {
       method: 'PUT',
       headers: {
           'Content-Type': 'application/json',

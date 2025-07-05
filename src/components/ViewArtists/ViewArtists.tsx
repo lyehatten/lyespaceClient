@@ -37,7 +37,7 @@ class ViewArtists extends React.Component<Props, States> {
   }
 
   componentDidMount(){
-    fetch('https://lyespace-server.herokuapp.com/user/findAll')
+    fetch(`${process.env.REACT_APP_API_URL}/user/findAll`)
     .then(res => res.json())
     .then(data => this.setState({artistInfo: data}))
   }

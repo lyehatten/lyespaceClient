@@ -109,7 +109,7 @@ class InfoEdit extends React.Component<Props, States> {
   HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
         
-    fetch('https://lyespace-server.herokuapp.com/profile/update', {
+    fetch(`${process.env.REACT_APP_API_URL}/profile/update`, {
       method: 'PUT',
       headers: {
           'Content-Type': 'application/json',

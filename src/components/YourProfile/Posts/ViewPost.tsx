@@ -42,7 +42,7 @@ class ViewPost extends React.Component <Props, States> {
   }
 
   deletePost = (postId: number) =>{
-    fetch(`https://lyespace-server.herokuapp.com/posts/delete/${postId}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/posts/delete/${postId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

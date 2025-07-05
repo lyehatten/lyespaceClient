@@ -58,7 +58,7 @@ class FetchOther extends React.Component<Props, States> {
 
 
 componentDidMount(){
-  fetch(`https://lyespace-server.herokuapp.com/user/userInfo/${this.props.artistView}`)
+  fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.artistView}`)
   .then(res => res.json())
   .then(data => this.setState({
     firstName: data.firstName,
@@ -76,7 +76,7 @@ componentWillUnmount(){
 
 
   promoteUser = () => {
-    fetch(`https://lyespace-server.herokuapp.com/user/role/${this.props.artistView}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/user/role/${this.props.artistView}`, {
       method: 'PUT',
       headers: {
           'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ componentWillUnmount(){
     })
     .then(res => res.json())
     .then( data => {
-      fetch(`https://lyespace-server.herokuapp.com/user/userInfo/${this.props.artistView}`)
+      fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.artistView}`)
       .then(res => res.json())
       .then(data => this.setState({
         firstName: data.firstName,
@@ -100,7 +100,7 @@ componentWillUnmount(){
   }
 
   adminRemovePost = (id: number) => {
-    fetch(`https://lyespace-server.herokuapp.com/posts/adminRemove/${id}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/posts/adminRemove/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ componentWillUnmount(){
       }
   })
   .then(data => {
-    fetch(`https://lyespace-server.herokuapp.com/user/userInfo/${this.props.artistView}`)
+    fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.artistView}`)
   .then(res => res.json())
   .then(data => this.setState({
     firstName: data.firstName,
@@ -123,7 +123,7 @@ componentWillUnmount(){
   }
 
   removeAdmin = () => {
-    fetch(`https://lyespace-server.herokuapp.com/user/removeAdmin/${this.props.artistView}`, {
+    fetch(`${process.env.REACT_APP_API_URL}/user/removeAdmin/${this.props.artistView}`, {
       method: 'Delete',
       headers: {
           'Content-Type': 'application/json',

@@ -83,7 +83,7 @@ class Auth extends React.Component<propTypes, authStates>{
   HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
         
-    const url = this.state.login ? `https://lyespace-server.herokuapp.com/user/login` : `https://lyespace-server.herokuapp.com/user/register`;  
+    const url = this.state.login ? `${process.env.REACT_APP_API_URL}/user/login` : `${process.env.REACT_APP_API_URL}/user/register`;  
     const bodyObj = this.state.login ? { 
       email: this.state.email, 
       password: this.state.password} : 
@@ -107,7 +107,7 @@ class Auth extends React.Component<propTypes, authStates>{
       this.props.updateUserId(data.user.id)
       this.props.updateRole(data.user.userType)
       this.setState({message: data.message})
-      window.location.reload(true)
+      window.location.reload()
     } else {
       if (this.state.login) { 
         this.setState({message: data.error}) 

@@ -36,7 +36,7 @@ class CreatePost extends React.Component <Props,States>{
   HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
         
-    fetch('https://lyespace-server.herokuapp.com/posts/newPost', {
+    fetch(`${process.env.REACT_APP_API_URL}/posts/newPost`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',

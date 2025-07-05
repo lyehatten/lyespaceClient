@@ -71,7 +71,7 @@ class YourProfile extends React.Component<Props, States> {
 
 
   componentDidMount(){
-    fetch(`https://lyespace-server.herokuapp.com/user/userInfo/${this.props.userId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.userId}`)
     .then(res => res.json())
     .then(data => this.setState({
       firstName: data.firstName,
@@ -84,7 +84,7 @@ class YourProfile extends React.Component<Props, States> {
 
 
   refresh(userId: string){
-    fetch(`https://lyespace-server.herokuapp.com/user/userInfo/${userId}`)
+    fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${userId}`)
     .then(res => res.json())
     .then(data => this.setState({
       posts: data.posts
@@ -108,7 +108,7 @@ class YourProfile extends React.Component<Props, States> {
   };
 
   handleDelete = () => {
-    fetch(`https://lyespace-server.herokuapp.com/user/removeSelf`, {
+    fetch(`${process.env.REACT_APP_API_URL}/user/removeSelf`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',

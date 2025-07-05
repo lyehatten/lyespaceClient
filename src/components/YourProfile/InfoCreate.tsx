@@ -92,7 +92,7 @@ class InfoCreate extends React.Component<Props, States> {
   HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
         
-    fetch('https://lyespace-server.herokuapp.com/profile/create', {
+    fetch(`${process.env.REACT_APP_API_URL}/profile/create`, {
       method: 'POST',
       headers: {
           'Content-Type': 'application/json',
