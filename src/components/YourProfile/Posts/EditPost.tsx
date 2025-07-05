@@ -10,7 +10,7 @@ const styles = {
 
 interface Props extends WithStyles<typeof styles>  {
   post: {
-    id: number,
+    id: string,
     post: string,
     createdAt: string
   },

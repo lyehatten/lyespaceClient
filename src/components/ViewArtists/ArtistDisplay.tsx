@@ -36,7 +36,7 @@ interface PropTypes extends WithStyles<typeof styles> {
       stageName: string | null, 
       genres: Array<string> | null, 
       instruments: Array<string>} | null, 
-      id: number
+      id: string
     }>,
   updateArtistView: (newArtistView: string) => void
 }
@@ -44,6 +44,7 @@ interface PropTypes extends WithStyles<typeof styles> {
 
 const ArtistDisplay = (props: PropTypes) => {
   const {classes} = props
+  console.log(props.artistInfo)
   return(
     <div>
       {props.artistInfo.map(artist => {return(

@@ -49,7 +49,7 @@ type States = {
     soundcloud: string | null,
     examples: string | null
   } | null,
-  posts: Array<{id: number, post: string, createdAt: string}> | null,
+  posts: Array<{id: string, post: string, createdAt: string}> | null,
   editView: boolean
 }
 

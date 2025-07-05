@@ -2,7 +2,7 @@ import React from 'react'
 import ViewPost from './ViewPost';
 
 type Props = {
-  posts: Array<{id: number, post: string, createdAt: string}>,
+  posts: Array<{id: string, post: string, createdAt: string}>,
   refresh: Function,
   userId: string | null,
 }

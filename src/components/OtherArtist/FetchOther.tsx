@@ -41,7 +41,7 @@ type States = {
     soundcloud: string | null,
     examples: string | null
   } | null,
-  posts: Array<{id: number, post: string, createdAt: string}>,
+  posts: Array<{id: string, post: string, createdAt: string}>,
 }
 
 class FetchOther extends React.Component<Props, States> {  
@@ -99,7 +99,7 @@ componentWillUnmount(){
     .catch( error => console.log(error))
   }
 
-  adminRemovePost = (id: number) => {
+  adminRemovePost = (id: string) => {
     fetch(`${process.env.REACT_APP_API_URL}/posts/adminRemove/${id}`, {
       method: 'PUT',
       headers: {

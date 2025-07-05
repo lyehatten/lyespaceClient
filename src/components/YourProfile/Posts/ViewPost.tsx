@@ -15,7 +15,7 @@ const styles = {
 
 interface Props extends WithStyles<typeof styles> {
   post: {
-    id: number,
+    id: string,
     post: string,
     createdAt: string
   },
@@ -41,7 +41,7 @@ class ViewPost extends React.Component <Props, States> {
     })
   }
 
-  deletePost = (postId: number) =>{
+  deletePost = (postId: string) =>{
     fetch(`${process.env.REACT_APP_API_URL}/posts/delete/${postId}`, {
       method: 'DELETE',
       headers: {

@@ -18,9 +18,9 @@ const styles = {
 }
 
 interface Props extends WithStyles<typeof styles> {
-  posts: Array<{id: number, post: string, createdAt: string}>,
+  posts: Array<{id: string, post: string, createdAt: string}>,
   admin: string | null,
-  adminRemovePost: (id: number) => void
+  adminRemovePost: (id: string) => void
 }
 
 

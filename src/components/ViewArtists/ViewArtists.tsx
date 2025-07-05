@@ -22,7 +22,7 @@ type States = {
       genres: Array<string> | null, 
       instruments: Array<string>
     } | null, 
-    id: number
+    id: string
   }>
 }
 
