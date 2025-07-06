@@ -1,10 +1,10 @@
 import React from 'react';
 import Main from './components/Main';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import 'font-awesome/css/font-awesome.min.css';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: "#1A302D",

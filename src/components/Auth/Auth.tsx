@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography'
@@ -36,119 +36,103 @@ const styles = {
   }
 }
 
-interface propTypes extends WithStyles<typeof styles> {
+interface PropTypes extends WithStyles<typeof styles> {
   updateToken: (newToken: string) => void,
   updateUserId: (newUserId: string) => void,
   updateRole: (newRole: string) => void
 }
 
-type authStates = {
-  login: boolean,
-  firstName: string,
-  lastName: string,
-  email: string,
-  password: string,
-  message: string
-}
+function Auth(props: PropTypes) {
+  const classes = props.classes;
 
-class Auth extends React.Component<propTypes, authStates>{
-  constructor(props: propTypes){
-    super(props);
-    this.state = {
-      login: true,
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      message: ''
+  const [login, setLogin] = useState<boolean>(true);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [message, setMessage] = useState<string>('');
+
+  function title(): string {
+    return login ? 'Login' : 'Sign Up'
+  }
+
+  function loginToggle(): void {
+    setLogin(!login);
+    setFirstName('');
+    setLastName('');
+    setEmail('');
+    setPassword('');
+    setMessage('');
+  }
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+        
+    const url = login ? `${process.env.REACT_APP_API_URL}/user/login` : `${process.env.REACT_APP_API_URL}/user/register`;  
+    const bodyObj = login ? { 
+      email: email, 
+      password: password} : 
+      { email: email, 
+        password: password, 
+        firstName: firstName, 
+        lastName: lastName, 
+        userType: "musician" }
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodyObj)
+      })
+      const data = await res.json();
+      if(data.sessionToken) {
+        props.updateToken(data.sessionToken) 
+        props.updateUserId(data.user.id)
+        props.updateRole(data.user.userType)
+        setMessage(data.message)
+        window.location.reload()
+      } else {
+        if (login) { 
+          setMessage(data.error);
+        } else {
+          setMessage('Email already in use!')
+        }
+      }     
+    } catch (error) {
+      setMessage('Error with connection. Please try again later')
     }
   }
 
-  title = () => {
-    return this.state.login ? 'Login' : 'Sign Up';    
-  }
-
-  loginToggle = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    event.preventDefault();
-    this.setState({
-      login: !this.state.login,
-      firstName: '',
-      lastName: '',
-      email: "",
-      password: "",
-      message: ""
-    })
-  }
-  
-  HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-        
-    const url = this.state.login ? `${process.env.REACT_APP_API_URL}/user/login` : `${process.env.REACT_APP_API_URL}/user/register`;  
-    const bodyObj = this.state.login ? { 
-      email: this.state.email, 
-      password: this.state.password} : 
-      { email: this.state.email, 
-        password: this.state.password, 
-        firstName: this.state.firstName, 
-        lastName: this.state.lastName, 
-        userType: "musician"}
-        
-    fetch(url, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(bodyObj)
-    })
-    .then(res => res.json())
-    .then(data => {
-      if(data.sessionToken){
-      this.props.updateToken(data.sessionToken) 
-      this.props.updateUserId(data.user.id)
-      this.props.updateRole(data.user.userType)
-      this.setState({message: data.message})
-      window.location.reload()
-    } else {
-      if (this.state.login) { 
-        this.setState({message: data.error}) 
-    } else {
-        this.setState({message: "Email already in use!"}) 
-    }
-    }})
-    .catch( error => this.setState({message: `Error with connection. Please try again later!`}) )
-  }   
-    
-  render(){
-    const {classes} = this.props
   return (
     <div className={classes.root}>
       <Typography variant="h2" align='center' 
       id="header" className={classes.title} > 
-      {this.title()} 
+      {title()} 
       </Typography> 
-      <form onSubmit={this.HandleSubmit}>    
+      <form onSubmit={handleSubmit}>    
       
         {
-          this.state.login ? undefined :  
+          login ? undefined :  
           <div className={classes.inputs}>
             <TextField required 
               className={classes.half}
               label="First Name:"
               id="firstName" 
-              value={this.state.firstName} 
+              value={firstName} 
               variant="outlined"
-              onChange={(event) => {                 
-              this.setState({firstName: event.target.value});  
+              onChange={(event) => {     
+                setFirstName(event.target.value)
               }}
             /> 
             <TextField required 
               className={classes.half}
               label="Last Name:"
               id="lastName" 
-              value={this.state.lastName} 
+              value={lastName} 
               variant="outlined"
-              onChange={(event) => {                 
-              this.setState({lastName: event.target.value});  
+              onChange={(event) => {      
+                setLastName(event.target.value);
               }}
             />
           </div>
@@ -159,11 +143,11 @@ class Auth extends React.Component<propTypes, authStates>{
               type="email" 
               label="Email:"
               id="email" 
-              value={this.state.email} 
+              value={email} 
               placeholder="email@email.com" 
               variant="outlined"
-              onChange={(event) => {                 
-              this.setState({email: event.target.value});  
+              onChange={(event) => {
+                setEmail(event.target.value);
               }} 
           /> 
           <br/>
@@ -174,21 +158,21 @@ class Auth extends React.Component<propTypes, authStates>{
               variant="outlined"
               type="password" 
               id="password" 
-              value={this.state.password} 
+              value={password} 
               onChange={(event) => {
-              this.setState({password: event.target.value});
+                setPassword(event.target.value);
               }} 
           /> 
         </div>
         <div className={classes.msg}>
-          <Typography variant="subtitle1">{this.state.message}</Typography> 
+          <Typography variant="subtitle1">{message}</Typography> 
         </div>
         <div className={classes.btns} > 
         { 
-          this.state.login ? 
+          login ? 
           <Button variant="contained" color="secondary" id="Submit" type="submit">
             Login!
-          </Button> : this.state.password.length < 5 ? 
+          </Button> : password.length < 5 ? 
           <Typography variant="subtitle1" align="center">
             Password must be minimum 5 characters in length
           </Typography> : 
@@ -197,7 +181,7 @@ class Auth extends React.Component<propTypes, authStates>{
           </Button> 
         }
         { 
-          this.state.login ? 
+          login ? 
           <Typography className={classes.title} variant="subtitle1" align="center">
             Don't have an account?
           </Typography> : 
@@ -206,14 +190,13 @@ class Auth extends React.Component<propTypes, authStates>{
           </Typography>
         }
         <Button id="Login" 
-        onClick={this.loginToggle} variant="outlined" color="primary">
-          { this.state.login ? "Switch to Sign Up" : "Switch to Login"}  
+        onClick={loginToggle} variant="outlined" color="primary">
+          { login ? "Switch to Sign Up" : "Switch to Login"}  
         </Button>
         </div>
       </form>
     </div>
-  )}
+  )
 }
-
 
 export default withStyles(styles)(Auth);
