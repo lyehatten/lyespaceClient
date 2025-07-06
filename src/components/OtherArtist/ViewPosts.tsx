@@ -1,59 +1,67 @@
-import { Button } from "@material-ui/core";
-import { withStyles, WithStyles } from "@material-ui/core/styles";
+import { Button } from '@material-ui/core';
+import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 const styles = {
   root: {
-    margin: '10px'
+    margin: '10px',
   },
   posts: {
     padding: '20px',
     margin: '10px',
-    borderRadius: '2px'
+    borderRadius: '2px',
   },
   admn: {
-    marginLeft: '10px'
-  }
-}
+    marginLeft: '10px',
+  },
+};
 
 interface Props extends WithStyles<typeof styles> {
-  posts: Array<{id: string, post: string, createdAt: string}>,
+  posts: Array<{ id: string, post: string, createdAt: string }>,
   admin: string | null,
   adminRemovePost: (id: string) => void
 }
 
-
-const ViewPosts = (props: Props) => {
-  const {classes} = props
-  return(
+function ViewPosts(props: Props) {
+  const { classes } = props;
+  return (
     <div className={classes.root}>
-      <br/>
+      <br />
       <Typography variant="h3">Posts: </Typography>
       {
-        props.posts.map(post => {return(
-          <Box bgcolor="background.paper" 
-          borderColor='text.secondary' border={1} 
-          key={post.id} className={classes.posts}>
-            <Typography variant="body1" paragraph={true}>
+        props.posts.map((post) => (
+          <Box
+            bgcolor="background.paper"
+            borderColor="text.secondary"
+            border={1}
+            key={post.id}
+            className={classes.posts}
+          >
+            <Typography variant="body1" paragraph>
               {post.post}
             </Typography>
             <Typography variant="overline">
-              DATE: { post.createdAt.slice(0, 10)}
+              DATE:
+              {' '}
+              { post.createdAt.slice(0, 10)}
             </Typography>
             {
-              props.admin === "bandmate" || props.admin === "big boss" ? 
-              <Button color="primary" className={classes.admn}
-              onClick={() => props.adminRemovePost(post.id) }>
-                Remove Post
-              </Button> : undefined
+              props.admin === 'bandmate' || props.admin === 'big boss' ? (
+                <Button
+                  color="primary"
+                  className={classes.admn}
+                  onClick={() => props.adminRemovePost(post.id)}
+                >
+                  Remove Post
+                </Button>
+              ) : undefined
             }
           </Box>
-        )})
+        ))
       }
     </div>
-  )
-
+  );
 }
 
 export default withStyles(styles)(ViewPosts);

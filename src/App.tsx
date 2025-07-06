@@ -7,24 +7,21 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 const theme = createTheme({
   palette: {
     primary: {
-      main: "#1A302D",
+      main: '#1A302D',
     },
     secondary: {
       main: '#56C681',
-    }
+    },
   },
 });
 
-
-const App: React.FunctionComponent = () => {
-  return (
-    <React.Fragment>
-      <CssBaseline/>
-      <MuiThemeProvider theme={theme}>
-        <Main />
-      </MuiThemeProvider>
-    </React.Fragment>
-  );
-}
+const App: React.FunctionComponent = () => (
+  <>
+    <CssBaseline />
+    <MuiThemeProvider theme={theme}>
+      <Main />
+    </MuiThemeProvider>
+  </>
+);
 
 export default App;
