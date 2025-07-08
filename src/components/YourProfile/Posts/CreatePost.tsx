@@ -17,10 +17,13 @@ const styles = {
 interface Props extends WithStyles<typeof styles> {
   refresh: Function,
   userId: string | null,
+  getUserInfo: () => void
 }
 
 function CreatePost(props: Props) {
-  const { classes, refresh, userId } = props;
+  const {
+    classes, refresh, userId, getUserInfo,
+  } = props;
   const [post, setPost] = useState<string>('');
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -40,6 +43,7 @@ function CreatePost(props: Props) {
       if (data) {
         refresh(userId);
         setPost('');
+        getUserInfo();
       }
     } catch (err) {
       console.log(err);

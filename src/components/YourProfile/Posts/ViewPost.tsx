@@ -18,11 +18,12 @@ interface Props extends WithStyles<typeof styles> {
   post: Post,
   refresh: Function,
   userId: string | null,
+  getUserInfo: () => void,
 }
 
 function ViewPost(props: Props) {
   const {
-    classes, post, refresh, userId,
+    classes, post, refresh, userId, getUserInfo,
   } = props;
 
   const [editToggle, setEditToggle] = useState<boolean>(false);
@@ -39,6 +40,7 @@ function ViewPost(props: Props) {
       const data = await res.json();
       if (data) {
         refresh(userId);
+        getUserInfo();
       }
     } catch (error) {
       console.log(error);
@@ -57,6 +59,7 @@ function ViewPost(props: Props) {
             ? (
               <EditPost
                 userId={userId}
+                getUserInfo={getUserInfo}
                 post={post}
                 editToggle={() => setEditToggle(!editToggle)}
                 refresh={refresh}

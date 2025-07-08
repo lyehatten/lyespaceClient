@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -29,12 +29,12 @@ const styles = {
 };
 
 interface Props extends WithStyles<typeof styles> {
-  userId: string | null,
 }
 
 function YourProfile(props: Props) {
   const history = useHistory();
-  const { classes, userId } = props;
+  const userId = localStorage.getItem('userId');
+  const { classes } = props;
 
   const [deleteState, setDeleteState] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string>('');
@@ -58,7 +58,14 @@ function YourProfile(props: Props) {
 
   useEffect(() => {
     getUserInfo();
-  }, [editView, posts]);
+  }, [editView]);
+
+  const getUserInfoCallback = useCallback(
+    () => {
+      getUserInfo();
+    },
+    [],
+  );
 
   async function refresh(id: string) {
     try {
@@ -167,7 +174,12 @@ function YourProfile(props: Props) {
       <br />
       <br />
       <Divider />
-      <Posts posts={posts} refresh={() => refresh} userId={userId} />
+      <Posts
+        posts={posts}
+        refresh={() => refresh}
+        getUserInfo={getUserInfoCallback}
+        userId={userId}
+      />
     </div>
   );
 }

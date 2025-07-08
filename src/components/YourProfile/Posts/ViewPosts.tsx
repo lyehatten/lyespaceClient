@@ -6,15 +6,24 @@ type Props = {
   posts: Array<Post>,
   refresh: Function,
   userId: string | null,
+  getUserInfo: () => void
 };
 
 function ViewPosts(props: Props) {
-  const { posts, refresh, userId } = props;
+  const {
+    posts, refresh, userId, getUserInfo,
+  } = props;
   return (
     <div>
       {
         posts.map((post) => (
-          <ViewPost key={post.id} post={post} refresh={refresh} userId={userId} />
+          <ViewPost
+            key={post.id}
+            getUserInfo={getUserInfo}
+            post={post}
+            refresh={refresh}
+            userId={userId}
+          />
         ))
       }
     </div>

@@ -14,21 +14,29 @@ const styles = {
 interface Props extends WithStyles<typeof styles> {
   posts: Array<Post> | null,
   userId: string | null,
-  refresh: Function
+  refresh: Function,
+  getUserInfo: () => void
 }
 
 function Posts(props: Props) {
   const {
-    classes, refresh, userId, posts,
+    classes, refresh, userId, posts, getUserInfo,
   } = props;
   return (
     <div className={classes.root}>
       <br />
       <Typography variant="h3">Posts: </Typography>
-      <CreatePost refresh={refresh} userId={userId} />
+      <CreatePost refresh={refresh} getUserInfo={getUserInfo} userId={userId} />
       <br />
       <br />
-      {posts && <ViewPosts posts={posts} userId={userId} refresh={refresh} />}
+      {posts && (
+      <ViewPosts
+        posts={posts}
+        userId={userId}
+        getUserInfo={getUserInfo}
+        refresh={refresh}
+      />
+      )}
     </div>
   );
 }

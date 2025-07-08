@@ -74,12 +74,10 @@ function Main(props: Props) {
             <Route exact path="/">
               <HomeRoute
                 token={token}
-                userId={userId}
               />
             </Route>
             <Route exact path="/artistview">
               <ArtistRoute
-                userId={userId}
                 role={role}
                 artistView={artistView}
               />

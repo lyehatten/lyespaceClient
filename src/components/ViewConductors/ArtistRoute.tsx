@@ -4,19 +4,18 @@ import YourProfile from '../YourProfile/YourProfile';
 import { UserTypes } from '../../types';
 
 type Props = {
-  userId: string | null,
   artistView: string | null,
   role: UserTypes | null,
 };
 
 export default function ArtistRoute(props: Props) {
   const {
-    userId, artistView, role,
+    artistView, role,
   } = props;
   return (
     <div>
-      {userId === artistView
-        ? <YourProfile userId={userId} />
+      {localStorage.getItem('userId') === artistView
+        ? <YourProfile />
         : (
           <FetchOther
             userRole={role}
