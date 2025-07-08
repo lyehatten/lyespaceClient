@@ -47,7 +47,7 @@ function YourProfile(props: Props) {
     try {
       const res = await fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${userId}`);
       const data = await res.json();
-      setFirstName(data.firstname);
+      setFirstName(data.firstName);
       setLastName(data.lastName);
       setProfileData(data.profile);
       setPosts(data.posts);
