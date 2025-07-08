@@ -37,16 +37,6 @@ const styles = {
   },
 };
 
-const defaultProps = {
-  bgcolor: 'background.paper',
-  m: 1,
-  border: 1,
-  style: { width: '290px', height: '300px' },
-  margin: 'auto',
-  marginBottom: '20px',
-  marginTop: '20px',
-};
-
 interface Props extends WithStyles<typeof styles> {
 
 }
@@ -65,21 +55,10 @@ function HomePage({ classes }: Props) {
       <hr />
       <div className={classes.page}>
         <Typography variant="h2" gutterBottom display="inline">
-          I'm Lye.
-        </Typography>
-        <Typography
-          display="inline"
-          gutterBottom
-          variant="subtitle2"
-        >
-          {' '}
-          (or lye).
-        </Typography>
-        <Typography variant="h6" align="center" color="textSecondary" gutterBottom>
-          Call me whatever.
+          I&lsquo;m Lye.
         </Typography>
         <Typography variant="h3" gutterBottom align="right" className={classes.leftmargin}>
-          I'm always looking for
+          I&lsquo;m always looking for
           <br />
           folks to make music with.
         </Typography>
@@ -90,7 +69,17 @@ function HomePage({ classes }: Props) {
           Here at LyeSpace you can make a profile with information about your music,
           links to your social media, and embed examples of the stuff you have created!
         </Typography>
-        <Box justifyContent="center" borderColor="primary.main" {...defaultProps}>
+        <Box
+          justifyContent="center"
+          borderColor="primary.main"
+          bgcolor="background.paper"
+          m="1"
+          border={1}
+          style={{ width: '290px', height: '300px' }}
+          margin="auto"
+          marginBottom="20px"
+          marginTop="20px"
+        >
           <Typography gutterBottom className={classes.myProf} align="center" variant="h6">
             Interested in checking
             {' '}
@@ -133,7 +122,7 @@ function HomePage({ classes }: Props) {
           out your music!
         </Typography>
         <Typography className={classes.pals} align="center" variant="h2">
-          Let's make music together!
+          Let&lsquo;s make music together!
         </Typography>
       </div>
     </div>

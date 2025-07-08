@@ -26,41 +26,35 @@ interface Props extends WithStyles<typeof styles> {
   logout: Function
 }
 
-class Nav extends React.Component<Props> {
-  clickLogout(e: React.MouseEvent) {
-    this.props.logout();
-  }
+function Nav(props: Props) {
+  const { classes, token, logout } = props;
 
-  render() {
-    const { classes } = this.props;
-
-    return (
-      <AppBar position="sticky" className={classes.root}>
-        <Toolbar>
-          <Typography className={classes.title}>
-            <Link to="/" className={classes.links}>
-              LyeSpace
-            </Link>
-          </Typography>
-          <Link to="/artists" className={classes.links}>
-            <Button color="inherit">View Artists</Button>
+  return (
+    <AppBar position="sticky" className={classes.root}>
+      <Toolbar>
+        <Typography className={classes.title}>
+          <Link to="/" className={classes.links}>
+            LyeSpace
           </Link>
-          {this.props.token ? (
-            <Button
-              color="inherit"
-              onClick={(e) => this.clickLogout(e)}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Link to="/login" className={classes.links}>
-              <Button color="inherit">Login</Button>
-            </Link>
-          )}
-        </Toolbar>
-      </AppBar>
-    );
-  }
+        </Typography>
+        <Link to="/artists" className={classes.links}>
+          <Button color="inherit">View Artists</Button>
+        </Link>
+        {token ? (
+          <Button
+            color="inherit"
+            onClick={logout()}
+          >
+            Logout
+          </Button>
+        ) : (
+          <Link to="/login" className={classes.links}>
+            <Button color="inherit">Login</Button>
+          </Link>
+        )}
+      </Toolbar>
+    </AppBar>
+  );
 }
 
 export default withStyles(styles)(Nav);

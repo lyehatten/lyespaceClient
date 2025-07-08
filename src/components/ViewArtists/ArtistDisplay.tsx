@@ -1,3 +1,4 @@
+import React from 'react';
 import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
@@ -42,11 +43,10 @@ interface PropTypes extends WithStyles<typeof styles> {
 }
 
 function ArtistDisplay(props: PropTypes) {
-  const { classes } = props;
-  console.log(props.artistInfo);
+  const { classes, artistInfo, updateArtistView } = props;
   return (
     <div>
-      {props.artistInfo.map((artist) => (
+      {artistInfo.map((artist) => (
         <Box
           key={artist.id}
           bgcolor="background.paper"
@@ -56,25 +56,23 @@ function ArtistDisplay(props: PropTypes) {
         >
           <Box flexGrow={1} flexDirection="column" className={classes.nameBox}>
             <Typography variant="h4">
-              {artist.firstName}
-              {' '}
-              {artist.lastName}
+              {`${artist.firstName} ${artist.lastName}`}
             </Typography>
-            {artist.profile ? artist.profile.stageName
-              ? (
-                <Typography variant="h5">
-                  aka
+            {
+              artist.profile && artist.profile.stageName && (
+              <Typography variant="h5">
+                aka
                   {' '}
-                  {artist.profile.stageName}
-                </Typography>
+                {artist.profile.stageName}
+              </Typography>
               )
-              : undefined : undefined}
+            }
             <Link to="/artistview" style={{ color: 'inherit', textDecoration: 'none' }}>
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() => {
-                  props.updateArtistView(artist.id.toString());
+                  updateArtistView(artist.id.toString());
                 }}
               >
                 View Full Profile
@@ -84,41 +82,31 @@ function ArtistDisplay(props: PropTypes) {
           <Box className={classes.tagBox} textAlign="center">
             <Typography variant="h5">Genres: </Typography>
             {
-              artist.profile ? artist.profile.genres
-                ? artist.profile.genres.map((genre) => (
-                  <Typography
-                    className={classes.tags}
-                    variant="overline"
-                    key={genre}
-                  >
-                    {genre}
-                  </Typography>
-                ))
-                : (
-                  <Typography variant="overline">
-                    Artist has not added
-                    {' '}
-                    <br />
-                    {' '}
-                    genres to profile.
-                  </Typography>
-                )
-                : (
-                  <Typography variant="overline">
-                    Artist has not added
-                    {' '}
-                    <br />
-                    {' '}
-                    genres to profile.
-                  </Typography>
-                )
+              artist.profile && artist.profile.genres && artist.profile.genres.map((genre) => (
+                <Typography
+                  className={classes.tags}
+                  variant="overline"
+                  key={genre}
+                >
+                  {genre}
+                </Typography>
+              ))
+            }
+            {
+              (!artist.profile || !artist.profile.genres) && (
+              <Typography variant="overline">
+                Artist has not added
+                <br />
+                genres to profile.
+              </Typography>
+              )
             }
           </Box>
           <Box textAlign="center" className={classes.tagBox}>
             <Typography variant="h5">Instruments:   </Typography>
             {
-              artist.profile ? artist.profile.instruments
-                ? artist.profile.instruments.map((instrument) => (
+              artist.profile && artist.profile.instruments && (
+                artist.profile.instruments.map((instrument) => (
                   <Typography
                     className={classes.tags}
                     variant="overline"
@@ -126,25 +114,16 @@ function ArtistDisplay(props: PropTypes) {
                   >
                     {instrument}
                   </Typography>
-                ))
-                : (
-                  <Typography variant="overline">
-                    Artist has not added
-                    {' '}
-                    <br />
-                    {' '}
-                    instruments to profile.
-                  </Typography>
-                )
-                : (
-                  <Typography variant="overline">
-                    Artist has not added
-                    {' '}
-                    <br />
-                    {' '}
-                    instruments to profile.
-                  </Typography>
-                )
+                )))
+            }
+            {
+              (!artist.profile || !artist.profile.instruments) && (
+              <Typography variant="overline">
+                Artist has not added
+                <br />
+                instruments to profile.
+              </Typography>
+              )
             }
             <br />
           </Box>

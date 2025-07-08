@@ -1,24 +1,24 @@
 import React from 'react';
 import ViewPost from './ViewPost';
+import { Post } from '../../../types';
 
 type Props = {
-  posts: Array<{ id: string, post: string, createdAt: string }>,
+  posts: Array<Post>,
   refresh: Function,
   userId: string | null,
 };
 
-class ViewPosts extends React.Component <Props> {
-  render() {
-    return (
-      <div>
-        {
-        this.props.posts.map((post) => (
-          <ViewPost post={post} refresh={this.props.refresh} userId={this.props.userId} />
+function ViewPosts(props: Props) {
+  const { posts, refresh, userId } = props;
+  return (
+    <div>
+      {
+        posts.map((post) => (
+          <ViewPost key={post.id} post={post} refresh={refresh} userId={userId} />
         ))
       }
-      </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default ViewPosts;

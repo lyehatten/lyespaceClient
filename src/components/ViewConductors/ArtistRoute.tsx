@@ -1,32 +1,29 @@
 import React from 'react';
 import FetchOther from '../OtherArtist/FetchOther';
 import YourProfile from '../YourProfile/YourProfile';
+import { UserTypes } from '../../types';
 
-type PropTypes = {
-  token: string | null,
+type Props = {
   userId: string | null,
-  artistView: string,
+  artistView: string | null,
   logout: Function,
-  role: string | null,
-  updateArtistView: Function
+  role: UserTypes | null,
 };
 
-export default class ArtistRoute extends React.Component<PropTypes, {} > {
-// determines if someone is reaching a profile isnt theirs
-// or if they clicked their own profile
-  render() {
-    return (
-      <div>
-        {this.props.userId === this.props.artistView
-          ? <YourProfile logout={this.props.logout} userId={this.props.userId} />
-          : (
-            <FetchOther
-              updateArtistView={this.props.updateArtistView}
-              role={this.props.role}
-              artistView={this.props.artistView}
-            />
-          )}
-      </div>
-    );
-  }
+export default function ArtistRoute(props: Props) {
+  const {
+    userId, artistView, logout, role,
+  } = props;
+  return (
+    <div>
+      {userId === artistView
+        ? <YourProfile logout={logout} userId={userId} />
+        : (
+          <FetchOther
+            userRole={role}
+            artistView={artistView}
+          />
+        )}
+    </div>
+  );
 }

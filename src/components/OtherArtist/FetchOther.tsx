@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import ViewPosts from './ViewPosts';
 import ViewOther from './ViewOther';
+import { Post, ProfileData } from '../../types';
 
 const styles = {
   root: {
@@ -16,198 +17,155 @@ const styles = {
 };
 
 interface Props extends WithStyles<typeof styles> {
-  artistView: string,
-  role: string | null,
-  updateArtistView: Function
+  artistView: string | null,
+  userRole: string | null,
 }
 
-type States = {
-  firstName: string,
-  lastName: string,
-  role: string,
-  profileData: {
-    stageName: string | null,
-    bio: string | null,
-    genres: Array<string> | null,
-    instruments: Array<string> | null,
-    twitter: string | null,
-    instagram: string | null,
-    facebook: string | null,
-    bandcamp: string | null,
-    spotify: string | null,
-    youtube: string | null,
-    soundcloud: string | null,
-    examples: string | null
-  } | null,
-  posts: Array<{ id: string, post: string, createdAt: string }>,
-};
+function FetchOther(props: Props) {
+  const {
+    classes, artistView, userRole,
+  } = props;
+  const [firstName, setFirstName] = useState<string>('Currently');
+  const [lastName, setLastName] = useState<string>('Loading...');
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [role, setRole] = useState<string>('');
+  const [posts, setPosts] = useState<Post[] | null>(null);
 
-class FetchOther extends React.Component<Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      firstName: 'Currently',
-      lastName: 'Loading...',
-      profileData: null,
-      role: '',
-      posts: [],
-    };
+  async function fetchUserInfo() {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${artistView}`);
+      const data = await res.json();
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
+      setProfileData(data.profile);
+      setRole(data.role);
+      setPosts(data.posts);
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.artistView}`)
-      .then((res) => res.json())
-      .then((data) => this.setState({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        profileData: data.profile,
-        role: data.userType,
-        posts: data.posts,
-      }))
-      .catch((err) => console.log(err));
+  useEffect(() => {
+    fetchUserInfo();
+  });
+
+  async function promoteUser() {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/role/${artistView}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('token')}`,
+        },
+      });
+      if (res) {
+        fetchUserInfo();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 
-  componentWillUnmount() {
-    this.props.updateArtistView(1);
+  async function adminRemovePost(id: string) {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/posts/adminRemove/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('token')}`,
+        },
+      });
+      if (res) {
+        fetchUserInfo();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  promoteUser = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/user/role/${this.props.artistView}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.artistView}`)
-          .then((res) => res.json())
-          .then((data) => this.setState({
-            firstName: data.firstName,
-            lastName: data.lastName,
-            profileData: data.profile,
-            role: data.userType,
-          }))
-          .catch((error) => console.log(error));
-      })
-      .catch((error) => console.log(error));
-  };
+  async function removeAdmin() {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/removeAdmin/${artistView}`, {
+        method: 'Delete',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('token')}`,
+        },
+      });
+      if (res) {
+        fetchUserInfo();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  adminRemovePost = (id: string) => {
-    fetch(`${process.env.REACT_APP_API_URL}/posts/adminRemove/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    })
-      .then((data) => {
-        fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.artistView}`)
-          .then((res) => res.json())
-          .then((data) => this.setState({
-            firstName: data.firstName,
-            lastName: data.lastName,
-            profileData: data.profile,
-            role: data.userType,
-            posts: data.posts,
-          }))
-          .catch((err) => console.log(err));
-      })
-      .catch((error) => console.log(error));
-  };
-
-  removeAdmin = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/user/removeAdmin/${this.props.artistView}`, {
-      method: 'Delete',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => window.location.reload())
-      .catch((error) => console.log(error));
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <Typography display="inline" variant="h2">
-          {this.state.firstName}
-          {' '}
-          {this.state.lastName}
-        </Typography>
-        {
-          this.state.profileData
-            ? <ViewOther profileData={this.state.profileData} />
-            : <h4>User has no profile data!</h4>
-        }
-        {
-          this.props.role === 'big boss'
-            ? this.state.role === 'bandmate' ? (
-              <div>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => { this.removeAdmin(); }}
-                >
-                  Remove Profile
-                </Button>
-              </div>
-            ) : (
-              <div>
-                <Typography variant="subtitle1">
-                  User Role:
-                  {' '}
-                  <br />
-                  {' '}
-                  {this.state.role}
-                </Typography>
-                <br />
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => { this.promoteUser(); }}
-                >
-                  Promote to Bandmate
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  className={classes.btnTwo}
-                  onClick={() => { this.removeAdmin(); }}
-                >
-                  Remove Profile
-                </Button>
-              </div>
-            )
-            : undefined
-        }
-        {this.props.role === 'bandmate' ? (
-          <Button variant="contained" color="primary" onClick={() => { this.removeAdmin(); }}>
+  return (
+    <div className={classes.root}>
+      <Typography display="inline" variant="h2">
+        {`${firstName} ${lastName}`}
+      </Typography>
+      {
+        profileData
+          ? <ViewOther profileData={profileData} />
+          : <h4>User has no profile data!</h4>
+      }
+      {
+        userRole === 'big boss' && (
+        <div>
+          <Typography variant="subtitle1">
+            User Role:
+            <br />
+            {role}
+          </Typography>
+          <br />
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => { promoteUser(); }}
+          >
+            Promote to Bandmate
+          </Button>
+          <Button
+            variant="outlined"
+            color="primary"
+            className={classes.btnTwo}
+            onClick={() => { removeAdmin(); }}
+          >
             Remove Profile
           </Button>
-        ) : undefined}
-        {
-          this.state.posts.length > 0
-            ? (
-              <div>
-                <br />
-                <br />
-                <Divider />
-                <ViewPosts
-                  posts={this.state.posts}
-                  admin={this.props.role}
-                  adminRemovePost={this.adminRemovePost}
-                />
-              </div>
-            ) : undefined
+        </div>
+        )
+      }
+      {
+        userRole === 'bandmate' && (
+          <div>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => { removeAdmin(); }}
+            >
+              Remove Profile
+            </Button>
+          </div>
+        )
+      }
+      {
+          posts && (
+          <div>
+            <br />
+            <br />
+            <Divider />
+            <ViewPosts
+              posts={posts}
+              admin={userRole}
+              adminRemovePost={() => adminRemovePost}
+            />
+          </div>
+          )
         }
-      </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default withStyles(styles)(FetchOther);

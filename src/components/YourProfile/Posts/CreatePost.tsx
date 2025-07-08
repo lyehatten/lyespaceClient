@@ -1,5 +1,5 @@
+import React, { useState } from 'react';
 import { Button, TextField } from '@material-ui/core';
-import React from 'react';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 
@@ -19,72 +19,62 @@ interface Props extends WithStyles<typeof styles> {
   userId: string | null,
 }
 
-type States = {
-  post: string
-};
+function CreatePost(props: Props) {
+  const { classes, refresh, userId } = props;
+  const [post, setPost] = useState<string>('');
 
-class CreatePost extends React.Component <Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      post: '',
-    };
-  }
-
-  HandleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-
-    fetch(`${process.env.REACT_APP_API_URL}/posts/newPost`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify({
-        post: this.state.post,
-      }),
-    })
-      .then((res) => res.json())
-      .then((data) => this.props.refresh(this.props.userId))
-      .then((data) => this.setState({ post: '' }))
-      .catch((error) => console.log(error));
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <Box
-        bgcolor="background.paper"
-        borderColor="text.secondary"
-        border={1}
-        className={classes.posts}
-      >
-        <form onSubmit={this.HandleSubmit}>
-          <TextField
-            className={classes.field}
-            label="New Post:"
-            id="post"
-            value={this.state.post}
-            multiline
-            variant="outlined"
-            onChange={(event) => {
-              this.setState({ post: event.target.value });
-            }}
-          />
-          <br />
-          <br />
-          <Button
-            variant="outlined"
-            color="inherit"
-            id="Submit"
-            type="submit"
-          >
-            Post!
-          </Button>
-        </form>
-      </Box>
-    );
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/posts/newPost`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          post,
+        }),
+      });
+      const data = await res.json();
+      if (data) {
+        refresh(userId);
+        setPost('');
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
+  return (
+    <Box
+      bgcolor="background.paper"
+      borderColor="text.secondary"
+      border={1}
+      className={classes.posts}
+    >
+      <form onSubmit={handleSubmit}>
+        <TextField
+          className={classes.field}
+          label="New Post:"
+          id="post"
+          value={post}
+          multiline
+          variant="outlined"
+          onChange={(event) => setPost(event.target.value)}
+        />
+        <br />
+        <br />
+        <Button
+          variant="outlined"
+          color="inherit"
+          id="Submit"
+          type="submit"
+        >
+          Post!
+        </Button>
+      </form>
+    </Box>
+  );
 }
 
 export default withStyles(styles)(CreatePost);

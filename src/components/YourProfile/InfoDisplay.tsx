@@ -1,3 +1,4 @@
+import React from 'react';
 import { Button } from '@material-ui/core';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -9,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import DOMPurify from 'dompurify';
 import Divider from '@material-ui/core/Divider';
+import { ProfileData } from '../../types';
 
 const styles = {
   root: {
@@ -52,61 +54,44 @@ const styles = {
   },
 };
 
-interface propTypes extends WithStyles<typeof styles> {
+interface Props extends WithStyles<typeof styles> {
   editToggle: Function,
-  profileData: {
-    stageName: string | null,
-    bio: string | null,
-    genres: Array<string> | null,
-    instruments: Array<string> | null,
-    twitter: string | null,
-    instagram: string | null,
-    facebook: string | null,
-    bandcamp: string | null,
-    spotify: string | null,
-    youtube: string | null,
-    soundcloud: string | null,
-    examples: string | null
-  },
+  profileData: ProfileData,
 }
 
-function InfoDisplay(props: propTypes) {
-  const { classes } = props;
+function InfoDisplay(props: Props) {
+  const { classes, profileData, editToggle } = props;
   return (
     <div className={classes.root}>
       {
-        props.profileData.stageName
-          ? (
-            <Typography variant="h5" display="inline">
-              aka
-              {' '}
-              {props.profileData.stageName}
-            </Typography>
-          )
-          : undefined
+        profileData.stageName && (
+        <Typography variant="h5" display="inline">
+          aka
+          {' '}
+          {profileData.stageName}
+        </Typography>
+        )
       }
       <Divider />
       <br />
       <br />
       {
-        props.profileData.bio
-          ? (
-            <div>
-              <Typography variant="h5">Bio:</Typography>
-              <Typography variant="body1" className={classes.indent} paragraph>
-                {props.profileData.bio}
-              </Typography>
-            </div>
-          ) : undefined
+        profileData.bio && (
+        <div>
+          <Typography variant="h5">Bio:</Typography>
+          <Typography variant="body1" className={classes.indent} paragraph>
+            {profileData.bio}
+          </Typography>
+        </div>
+        )
       }
       {
-        props.profileData.genres
-          ? (
-            <div className={classes.infoMargin}>
-              <Typography variant="h5">Genres:</Typography>
-              <div className={classes.indent}>
-                {
-              props.profileData.genres.map((genre) => (
+        profileData.genres && (
+        <div className={classes.infoMargin}>
+          <Typography variant="h5">Genres:</Typography>
+          <div className={classes.indent}>
+            {
+              profileData.genres.map((genre) => (
                 <Typography
                   variant="overline"
                   className={classes.tags}
@@ -116,17 +101,17 @@ function InfoDisplay(props: propTypes) {
                 </Typography>
               ))
             }
-              </div>
-            </div>
-          ) : undefined
+          </div>
+        </div>
+        )
       }
       {
-        props.profileData.instruments ? (
+        profileData.instruments && (
           <div className={classes.infoMargin}>
             <Typography variant="h5">Instruments: </Typography>
             <div className={classes.indent}>
               {
-            props.profileData.instruments.map((inst) => (
+            profileData.instruments.map((inst) => (
               <Typography
                 variant="overline"
                 className={classes.tags}
@@ -138,127 +123,122 @@ function InfoDisplay(props: propTypes) {
           }
             </div>
           </div>
-        ) : undefined
+        )
       }
       {
-        props.profileData.twitter || props.profileData.instagram || props.profileData.facebook
-          ? (
-            <div className={classes.infoMargin}>
-              <Typography variant="h5">Socials:</Typography>
-              <div className={classes.indent}>
-                {
-              props.profileData.facebook
-                ? (
-                  <Link
-                    rel="noreferrer"
-                    target="_blank"
-                    href={props.profileData.facebook}
-                  >
-                    <FacebookIcon className={classes.socials} />
-                  </Link>
-                ) : undefined
+        (profileData.twitter || profileData.instagram || profileData.facebook) && (
+        <div className={classes.infoMargin}>
+          <Typography variant="h5">Socials:</Typography>
+          <div className={classes.indent}>
+            {
+              profileData.facebook && (
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href={profileData.facebook}
+              >
+                <FacebookIcon className={classes.socials} />
+              </Link>
+              )
             }
-                {
-              props.profileData.instagram
-                ? (
-                  <Link
-                    rel="noreferrer"
-                    target="_blank"
-                    href={`https://instagram.com/${props.profileData.instagram}`}
-                  >
-                    <InstagramIcon className={classes.socials} />
-                  </Link>
-                ) : undefined
+            {
+              profileData.instagram && (
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href={`https://instagram.com/${profileData.instagram}`}
+              >
+                <InstagramIcon className={classes.socials} />
+              </Link>
+              )
               }
-                {
-              props.profileData.twitter
-                ? (
-                  <Link
-                    rel="noreferrer"
-                    target="_blank"
-                    href={`https://twitter.com/${props.profileData.twitter}`}
-                  >
-                    <TwitterIcon className={classes.socials} />
-                  </Link>
-                ) : undefined
+            {
+              profileData.twitter && (
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href={`https://twitter.com/${profileData.twitter}`}
+              >
+                <TwitterIcon className={classes.socials} />
+              </Link>
+              )
             }
-              </div>
-            </div>
-          )
-          : undefined
+          </div>
+        </div>
+        )
       }
       {
-        props.profileData.bandcamp || props.profileData.spotify || props.profileData.youtube || props.profileData.soundcloud
-          ? (
-            <div className={classes.infoMargin}>
-              <Typography variant="h5">Listen to Music: </Typography>
-              <div className={classes.indent}>
-                {
-              props.profileData.bandcamp
-                ? (
-                  <Link
-                    rel="noreferrer"
-                    target="_blank"
-                    href={props.profileData.bandcamp}
-                  >
-                    <Icon className={`fa fa-bandcamp ${classes.bc}`} />
-                  </Link>
-                ) : undefined
+        (
+          profileData.bandcamp
+          || profileData.spotify
+          || profileData.youtube
+          || profileData.soundcloud
+        ) && (
+          <div className={classes.infoMargin}>
+            <Typography variant="h5">Listen to Music: </Typography>
+            <div className={classes.indent}>
+              {
+              profileData.bandcamp && (
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href={profileData.bandcamp}
+              >
+                <Icon className={`fa fa-bandcamp ${classes.bc}`} />
+              </Link>
+              )
             }
-                {
-              props.profileData.youtube
-                ? (
-                  <Link
-                    rel="noreferrer"
-                    target="_blank"
-                    href={props.profileData.youtube}
-                  >
-                    <YouTubeIcon className={classes.yt} />
-                  </Link>
-                ) : undefined
+              {
+              profileData.youtube && (
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href={profileData.youtube}
+              >
+                <YouTubeIcon className={classes.yt} />
+              </Link>
+              )
             }
-                {
-              props.profileData.soundcloud
-                ? (
-                  <Link
-                    rel="noreferrer"
-                    target="_blank"
-                    href={props.profileData.soundcloud}
-                  >
-                    <Icon className={`fa fa-soundcloud ${classes.sc}`} />
-                  </Link>
-                ) : undefined
+              {
+              profileData.soundcloud && (
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href={profileData.soundcloud}
+              >
+                <Icon className={`fa fa-soundcloud ${classes.sc}`} />
+              </Link>
+              )
             }
-                {
-              props.profileData.spotify
-                ? (
-                  <Link
-                    rel="noreferrer"
-                    target="_blank"
-                    href={props.profileData.spotify}
-                  >
-                    <Icon className={`fa fa-spotify ${classes.spot}`} />
-                  </Link>
-                ) : undefined
+              {
+              profileData.spotify && (
+              <Link
+                rel="noreferrer"
+                target="_blank"
+                href={profileData.spotify}
+              >
+                <Icon className={`fa fa-spotify ${classes.spot}`} />
+              </Link>
+              )
             }
-              </div>
             </div>
-          ) : undefined
+          </div>
+        )
       }
 
       {
-        props.profileData.examples !== null
+        profileData.examples !== null
           ? (
             <div>
               <Typography variant="h5">Examples:</Typography>
               {
-            props.profileData.examples !== null
+            profileData.examples !== null
               ? (
                 <div
                   className={classes.insetHTML}
                   dangerouslySetInnerHTML={
               {
-                __html: DOMPurify.sanitize(props.profileData.examples, {
+                __html: DOMPurify.sanitize(profileData.examples, {
                   ADD_TAGS: ['iframe', 'div', 'a'],
                   ADD_ATTR: ['width', 'height',
                     'scrolling', 'frameborder', 'allow',
@@ -279,7 +259,7 @@ function InfoDisplay(props: propTypes) {
       <Button
         variant="contained"
         color="primary"
-        onClick={() => { props.editToggle(); }}
+        onClick={() => { editToggle(); }}
       >
         Edit Profile
       </Button>

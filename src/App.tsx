@@ -1,8 +1,8 @@
 import React from 'react';
-import Main from './components/Main';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import 'font-awesome/css/font-awesome.min.css';
 import CssBaseline from '@material-ui/core/CssBaseline';
+import Main from './components/Main';
 
 const theme = createTheme({
   palette: {
@@ -15,13 +15,15 @@ const theme = createTheme({
   },
 });
 
-const App: React.FunctionComponent = () => (
-  <>
-    <CssBaseline />
-    <MuiThemeProvider theme={theme}>
-      <Main />
-    </MuiThemeProvider>
-  </>
-);
+function App(): JSX.Element {
+  return (
+    <div>
+      <CssBaseline />
+      <MuiThemeProvider theme={theme}>
+        <Main />
+      </MuiThemeProvider>
+    </div>
+  );
+}
 
 export default App;

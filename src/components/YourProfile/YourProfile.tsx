@@ -1,5 +1,5 @@
 import { Button } from '@material-ui/core';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -11,6 +11,7 @@ import Posts from './Posts/Posts';
 import InfoEdit from './InfoEdit';
 import InfoDisplay from './InfoDisplay';
 import InfoCreate from './InfoCreate';
+import { Post, ProfileData } from '../../types';
 
 const styles = {
   root: {
@@ -31,163 +32,143 @@ interface Props extends WithStyles<typeof styles> {
   logout: Function
 }
 
-type States = {
-  deleteState: boolean,
-  firstName: string,
-  lastName: string,
-  profileData: {
-    stageName: string | null,
-    bio: string | null,
-    genres: Array<string> | null,
-    instruments: Array<string> | null,
-    twitter: string | null,
-    instagram: string | null,
-    facebook: string | null,
-    bandcamp: string | null,
-    spotify: string | null,
-    youtube: string | null,
-    soundcloud: string | null,
-    examples: string | null
-  } | null,
-  posts: Array<{ id: string, post: string, createdAt: string }> | null,
-  editView: boolean
-};
+function YourProfile(props: Props) {
+  const { classes, logout, userId } = props;
 
-class YourProfile extends React.Component<Props, States> {
-  constructor(props: Props) {
-    super(props);
-    this.refresh = this.refresh.bind(this);
-    this.state = {
-      deleteState: false,
-      firstName: '',
-      lastName: '',
-      profileData: null,
-      editView: false,
-      posts: null,
-    };
+  const [deleteState, setDeleteState] = useState<boolean>(false);
+  const [firstName, setFirstName] = useState<string>('');
+  const [lastName, setLastName] = useState<string>('');
+  const [profileData, setProfileData] = useState<ProfileData | null>(null);
+  const [posts, setPosts] = useState<Post[] | null>(null);
+  const [editView, setEditView] = useState<boolean>(false);
+
+  async function getUserInfo() {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${userId}`);
+      const data = await res.json();
+      setFirstName(data.firstname);
+      setLastName(data.lastName);
+      setProfileData(data.profile);
+      setPosts(data.posts);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  componentDidMount() {
-    fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${this.props.userId}`)
-      .then((res) => res.json())
-      .then((data) => this.setState({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        profileData: data.profile,
-        posts: data.posts,
-      }))
-      .catch((error) => console.log(error));
+  useEffect(() => {
+    getUserInfo();
+  });
+
+  async function refresh(id: string) {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${id}`);
+      const data = await res.json();
+      setPosts(data.posts);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  refresh(userId: string) {
-    fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${userId}`)
-      .then((res) => res.json())
-      .then((data) => this.setState({
-        posts: data.posts,
-      }))
-      .catch((error) => console.log(error));
+  async function handleDelete() {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/removeSelf`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `${localStorage.getItem('token')}`,
+        },
+      });
+      const data = await res.json();
+      if (data) {
+        setDeleteState(false);
+        logout();
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  editToggle = () => {
-    this.setState({
-      editView: !this.state.editView,
-    });
-  };
+  return (
+    <div className={classes.root}>
+      <Typography display="inline" variant="h2">
+        {firstName}
+        {' '}
+        {lastName}
+      </Typography>
 
-  handleClickOpen = () => {
-    this.setState({ deleteState: true });
-  };
+      {
+        profileData && editView && (
+        <InfoEdit editToggle={() => setEditView(!editView)} profileData={profileData} />
+        )
 
-  handleClose = () => {
-    this.setState({ deleteState: false });
-  };
-
-  handleDelete = () => {
-    fetch(`${process.env.REACT_APP_API_URL}/user/removeSelf`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `${localStorage.getItem('token')}`,
-      },
-    })
-      .then((data) => this.setState({ deleteState: false }))
-      .then((data) => this.props.logout())
-      .then((data) => window.location.reload())
-      .catch((error) => console.log(error));
-  };
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <Typography display="inline" variant="h2">
-          {this.state.firstName}
-          {' '}
-          {this.state.lastName}
-        </Typography>
-        {
-          this.state.profileData ? this.state.editView
-            ? <InfoEdit editToggle={this.editToggle} profileData={this.state.profileData} />
-            : <InfoDisplay editToggle={this.editToggle} profileData={this.state.profileData} />
-            : this.state.editView ? <InfoCreate editToggle={this.editToggle} />
-              : (
-                <div>
-                  <Divider />
-                  <div className={classes.createStuff}>
-                    <br />
-                    <Typography variant="h5">You have no profile data! Add some?</Typography>
-                    <br />
-                    <Button
-                      className={classes.btnTwo}
-                      variant="contained"
-                      color="secondary"
-                      onClick={this.editToggle}
-                    >
-                      Create Profile
-                    </Button>
-                    <br />
-                    <br />
-                  </div>
-                </div>
-              )
-        }
-        <Button
-          variant="outlined"
-          color="secondary"
-          className={classes.btnTwo}
-          onClick={() => this.handleClickOpen()}
-        >
-          Delete Account
-        </Button>
-        <Dialog
-          open={this.state.deleteState}
-          onClose={this.handleClose}
-          aria-labelledby="alert-dialog-title"
-          aria-describedby="alert-dialog-description"
-        >
-          <DialogContent>
-            <DialogContentText align="center" id="alert-dialog-description">
-              Are you sure you want to delete your account?
-              <br />
-              You will not be able to log back in and will need to sign up again.
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Cancel
+      }
+      {
+        !profileData && !editView && (
+        <div>
+          <Divider />
+          <div className={classes.createStuff}>
+            <br />
+            <Typography variant="h5">You have no profile data! Add some?</Typography>
+            <br />
+            <Button
+              className={classes.btnTwo}
+              variant="contained"
+              color="secondary"
+              onClick={() => setEditView(true)}
+            >
+              Create Profile
             </Button>
-            <Button onClick={this.handleDelete} color="secondary" autoFocus>
-              Delete Account
-            </Button>
-          </DialogActions>
-        </Dialog>
-        <br />
-        <br />
-        <Divider />
-        <Posts posts={this.state.posts} refresh={this.refresh} userId={this.props.userId} />
-      </div>
-    );
-  }
+            <br />
+            <br />
+          </div>
+        </div>
+        )
+      }
+
+      {!profileData && editView && <InfoCreate editToggle={() => setEditView(!editView)} />}
+
+      {
+        profileData && !editView && (
+        <InfoDisplay editToggle={() => setEditView(!editView)} profileData={profileData} />
+        )
+      }
+      <Button
+        variant="outlined"
+        color="secondary"
+        className={classes.btnTwo}
+        onClick={() => setDeleteState(true)}
+      >
+        Delete Account
+      </Button>
+      <Dialog
+        open={deleteState}
+        onClose={() => setDeleteState(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText align="center" id="alert-dialog-description">
+            Are you sure you want to delete your account?
+            <br />
+            You will not be able to log back in and will need to sign up again.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setDeleteState(false)} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={() => handleDelete} color="secondary" autoFocus>
+            Delete Account
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <br />
+      <br />
+      <Divider />
+      <Posts posts={posts} refresh={() => refresh} userId={userId} />
+    </div>
+  );
 }
 
 export default withStyles(styles)(YourProfile);

@@ -2,33 +2,28 @@ import React from 'react';
 import Auth from '../Auth/Auth';
 import YourProfile from '../YourProfile/YourProfile';
 
-type PropTypes = {
+type Props = {
   token: string | null,
-  updateToken: (newToken: string) => void,
-  updateUserId: (newUserId: string) => void,
-  updateRole: (newRole: string) => void,
+  updateUserInfo: () => void
   userId: string | null,
   logout: Function
 };
 
-export default class LoginRoute extends React.Component<PropTypes, {} > {
-  // can be replaced with a react router dom redirect eventually
-
-  render() {
-    return (
-      <div>
-        {
-          this.props.token
-            ? <YourProfile logout={this.props.logout} userId={this.props.userId} />
+export default function LoginRoute(props: Props) {
+  const {
+    logout, userId, token, updateUserInfo,
+  } = props;
+  return (
+    <div>
+      {
+          token
+            ? <YourProfile logout={() => logout} userId={userId} />
             : (
               <Auth
-                updateToken={this.props.updateToken}
-                updateUserId={this.props.updateUserId}
-                updateRole={this.props.updateRole}
+                updateUserInfo={updateUserInfo}
               />
             )
         }
-      </div>
-    );
-  }
+    </div>
+  );
 }

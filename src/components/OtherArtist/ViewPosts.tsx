@@ -1,7 +1,9 @@
+import React from 'react';
 import { Button } from '@material-ui/core';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import { Post } from '../../types';
 
 const styles = {
   root: {
@@ -18,19 +20,21 @@ const styles = {
 };
 
 interface Props extends WithStyles<typeof styles> {
-  posts: Array<{ id: string, post: string, createdAt: string }>,
+  posts: Post[] | null,
   admin: string | null,
   adminRemovePost: (id: string) => void
 }
 
 function ViewPosts(props: Props) {
-  const { classes } = props;
+  const {
+    classes, posts, admin, adminRemovePost,
+  } = props;
   return (
     <div className={classes.root}>
       <br />
       <Typography variant="h3">Posts: </Typography>
       {
-        props.posts.map((post) => (
+        posts && posts.map((post) => (
           <Box
             bgcolor="background.paper"
             borderColor="text.secondary"
@@ -47,11 +51,11 @@ function ViewPosts(props: Props) {
               { post.createdAt.slice(0, 10)}
             </Typography>
             {
-              props.admin === 'bandmate' || props.admin === 'big boss' ? (
+              admin === 'bandmate' || admin === 'big boss' ? (
                 <Button
                   color="primary"
                   className={classes.admn}
-                  onClick={() => props.adminRemovePost(post.id)}
+                  onClick={() => adminRemovePost(post.id)}
                 >
                   Remove Post
                 </Button>

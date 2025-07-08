@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import CreatePost from './CreatePost';
 import ViewPosts from './ViewPosts';
+import { Post } from '../../../types';
 
 const styles = {
   root: {
@@ -11,25 +12,25 @@ const styles = {
 };
 
 interface Props extends WithStyles<typeof styles> {
-  posts: Array<{ id: string, post: string, createdAt: string }> | null,
+  posts: Array<Post> | null,
   userId: string | null,
   refresh: Function
 }
 
-class Posts extends React.Component <Props> {
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <br />
-        <Typography variant="h3">Posts: </Typography>
-        <CreatePost refresh={this.props.refresh} userId={this.props.userId} />
-        <br />
-        <br />
-        {this.props.posts ? <ViewPosts posts={this.props.posts} userId={this.props.userId} refresh={this.props.refresh} /> : undefined}
-      </div>
-    );
-  }
+function Posts(props: Props) {
+  const {
+    classes, refresh, userId, posts,
+  } = props;
+  return (
+    <div className={classes.root}>
+      <br />
+      <Typography variant="h3">Posts: </Typography>
+      <CreatePost refresh={refresh} userId={userId} />
+      <br />
+      <br />
+      {posts && <ViewPosts posts={posts} userId={userId} refresh={refresh} />}
+    </div>
+  );
 }
 
 export default withStyles(styles)(Posts);

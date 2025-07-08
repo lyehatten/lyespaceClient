@@ -1,3 +1,4 @@
+import React from 'react';
 import Divider from '@material-ui/core/Divider';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import InstagramIcon from '@material-ui/icons/Instagram';
@@ -8,6 +9,7 @@ import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import DOMPurify from 'dompurify';
+import { ProfileData } from '../../types';
 
 const styles = {
   root: {
@@ -51,34 +53,22 @@ const styles = {
   },
 };
 
-interface propTypes extends WithStyles<typeof styles> {
-  profileData: {
-    stageName: string | null,
-    bio: string | null,
-    genres: Array<string> | null,
-    instruments: Array<string> | null,
-    twitter: string | null,
-    instagram: string | null,
-    facebook: string | null,
-    bandcamp: string | null,
-    spotify: string | null,
-    youtube: string | null,
-    soundcloud: string | null,
-    examples: string | null
-  },
+interface Props extends WithStyles<typeof styles> {
+  profileData: ProfileData
 }
 
-function ViewOther(props: propTypes) {
-  const { classes } = props;
+function ViewOther(props: Props) {
+  const { classes, profileData } = props;
+
   return (
     <div className={classes.root}>
       {
-        props.profileData.stageName
+        profileData.stageName
           ? (
             <Typography variant="h5" display="inline">
               aka
               {' '}
-              {props.profileData.stageName}
+              {profileData.stageName}
             </Typography>
           )
           : undefined
@@ -87,24 +77,24 @@ function ViewOther(props: propTypes) {
       <br />
       <br />
       {
-        props.profileData.bio
+        profileData.bio
           ? (
             <div>
               <Typography variant="h5">Bio:</Typography>
               <Typography variant="body1" className={classes.indent} paragraph>
-                {props.profileData.bio}
+                {profileData.bio}
               </Typography>
             </div>
           ) : undefined
       }
       {
-        props.profileData.genres
+        profileData.genres
           ? (
             <div className={classes.infoMargin}>
               <Typography variant="h5">Genres:</Typography>
               <div className={classes.indent}>
                 {
-              props.profileData.genres.map((genre) => (
+              profileData.genres.map((genre) => (
                 <Typography
                   variant="overline"
                   className={classes.tags}
@@ -119,12 +109,12 @@ function ViewOther(props: propTypes) {
           ) : undefined
       }
       {
-        props.profileData.instruments ? (
+        profileData.instruments ? (
           <div className={classes.infoMargin}>
             <Typography variant="h5">Instruments: </Typography>
             <div className={classes.indent}>
               {
-            props.profileData.instruments.map((inst) => (
+            profileData.instruments.map((inst) => (
               <Typography
                 variant="overline"
                 className={classes.tags}
@@ -139,42 +129,42 @@ function ViewOther(props: propTypes) {
         ) : undefined
       }
       {
-        props.profileData.twitter || props.profileData.instagram || props.profileData.facebook
+        profileData.twitter || profileData.instagram || profileData.facebook
           ? (
             <div className={classes.infoMargin}>
               <Typography variant="h5">Socials:</Typography>
               <div className={classes.indent}>
                 {
-              props.profileData.facebook
+              profileData.facebook
                 ? (
                   <Link
                     rel="noreferrer"
                     target="_blank"
-                    href={props.profileData.facebook}
+                    href={profileData.facebook}
                   >
                     <FacebookIcon className={classes.socials} />
                   </Link>
                 ) : undefined
             }
                 {
-              props.profileData.instagram
+              profileData.instagram
                 ? (
                   <Link
                     rel="noreferrer"
                     target="_blank"
-                    href={`https://instagram.com/${props.profileData.instagram}`}
+                    href={`https://instagram.com/${profileData.instagram}`}
                   >
                     <InstagramIcon className={classes.socials} />
                   </Link>
                 ) : undefined
               }
                 {
-              props.profileData.twitter
+              profileData.twitter
                 ? (
                   <Link
                     rel="noreferrer"
                     target="_blank"
-                    href={`https://twitter.com/${props.profileData.twitter}`}
+                    href={`https://twitter.com/${profileData.twitter}`}
                   >
                     <TwitterIcon className={classes.socials} />
                   </Link>
@@ -186,54 +176,54 @@ function ViewOther(props: propTypes) {
           : undefined
       }
       {
-        props.profileData.bandcamp || props.profileData.spotify || props.profileData.youtube || props.profileData.soundcloud
+        profileData.bandcamp || profileData.spotify || profileData.youtube || profileData.soundcloud
           ? (
             <div className={classes.infoMargin}>
               <Typography variant="h5">Listen to Music: </Typography>
               <div className={classes.indent}>
                 {
-              props.profileData.bandcamp
+              profileData.bandcamp
                 ? (
                   <Link
                     rel="noreferrer"
                     target="_blank"
-                    href={props.profileData.bandcamp}
+                    href={profileData.bandcamp}
                   >
                     <Icon className={`fa fa-bandcamp ${classes.bc}`} />
                   </Link>
                 ) : undefined
             }
                 {
-              props.profileData.youtube
+              profileData.youtube
                 ? (
                   <Link
                     rel="noreferrer"
                     target="_blank"
-                    href={props.profileData.youtube}
+                    href={profileData.youtube}
                   >
                     <YouTubeIcon className={classes.yt} />
                   </Link>
                 ) : undefined
             }
                 {
-              props.profileData.soundcloud
+              profileData.soundcloud
                 ? (
                   <Link
                     rel="noreferrer"
                     target="_blank"
-                    href={props.profileData.soundcloud}
+                    href={profileData.soundcloud}
                   >
                     <Icon className={`fa fa-soundcloud ${classes.sc}`} />
                   </Link>
                 ) : undefined
             }
                 {
-              props.profileData.spotify
+              profileData.spotify
                 ? (
                   <Link
                     rel="noreferrer"
                     target="_blank"
-                    href={props.profileData.spotify}
+                    href={profileData.spotify}
                   >
                     <Icon className={`fa fa-spotify ${classes.spot}`} />
                   </Link>
@@ -245,18 +235,18 @@ function ViewOther(props: propTypes) {
       }
 
       {
-        props.profileData.examples !== null
+        profileData.examples !== null
           ? (
             <div>
               <Typography variant="h5">Examples:</Typography>
               {
-            props.profileData.examples !== null
+            profileData.examples !== null
               ? (
                 <div
                   className={classes.insetHTML}
                   dangerouslySetInnerHTML={
               {
-                __html: DOMPurify.sanitize(props.profileData.examples, {
+                __html: DOMPurify.sanitize(profileData.examples, {
                   ADD_TAGS: ['iframe', 'div', 'a'],
                   ADD_ATTR: ['width', 'height',
                     'scrolling', 'frameborder', 'allow',

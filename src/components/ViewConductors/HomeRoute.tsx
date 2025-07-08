@@ -2,24 +2,22 @@ import React from 'react';
 import HomePage from '../HomePage/HomePage';
 import YourProfile from '../YourProfile/YourProfile';
 
-type PropTypes = {
+type Props = {
   token: string | null,
   userId: string | null,
   logout: Function
 };
 
-export default class HomeRoute extends React.Component<PropTypes, {} > {
-  // landing page vs your profile if you are logged in
+export default function HomeRoute(props: Props) {
+  const { token, logout, userId } = props;
 
-  render() {
-    return (
-      <div>
-        {
-          this.props.token
-            ? <YourProfile logout={this.props.logout} userId={this.props.userId} />
+  return (
+    <div>
+      {
+          token
+            ? <YourProfile logout={logout} userId={userId} />
             : <HomePage />
         }
-      </div>
-    );
-  }
+    </div>
+  );
 }

@@ -36,15 +36,13 @@ const styles = {
   },
 };
 
-interface PropTypes extends WithStyles<typeof styles> {
-  updateToken: (newToken: string) => void,
-  updateUserId: (newUserId: string) => void,
-  updateRole: (newRole: string) => void
+interface Props extends WithStyles<typeof styles> {
+  updateUserInfo: () => void
 }
 
-function Auth(props: PropTypes) {
+function Auth(props: Props) {
   const {
-    classes, updateToken, updateRole, updateUserId,
+    classes, updateUserInfo,
   } = props;
 
   const [login, setLogin] = useState<boolean>(true);
@@ -92,11 +90,10 @@ function Auth(props: PropTypes) {
       });
       const data = await res.json();
       if (data.sessionToken) {
-        updateToken(data.sessionToken);
-        updateUserId(data.user.id);
-        updateRole(data.user.userType);
-        setMessage(data.message);
-        window.location.reload();
+        localStorage.setItem('role', data.user.userType || '');
+        localStorage.setItem('token', data.sessionToken);
+        localStorage.setItem('userId', data.user.id);
+        updateUserInfo();
       } else if (login) {
         setMessage(data.error);
       } else {

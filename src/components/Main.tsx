@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Nav from './Nav';
@@ -6,13 +6,7 @@ import LoginRoute from './ViewConductors/LoginRoute';
 import HomeRoute from './ViewConductors/HomeRoute';
 import ViewArtists from './ViewArtists/ViewArtists';
 import ArtistRoute from './ViewConductors/ArtistRoute';
-
-type mainStates = {
-  token: string | null,
-  userId: string | null,
-  role: string | null,
-  artistView: string
-};
+import { UserTypes } from '../types';
 
 const styles = {
   setBackground: {
@@ -35,103 +29,78 @@ interface Props extends WithStyles<typeof styles> {
 
 }
 
-class Main extends React.Component < Props, mainStates> {
-  _isMounted = false;
+function Main(props: Props) {
+  const { classes } = props;
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      token: null,
-      userId: null,
-      role: null,
-      artistView: '1',
-    };
+  const [token, setToken] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [role, setRole] = useState<UserTypes | null>(null);
+  const [artistView, setArtistView] = useState<string | null>(null);
+
+  function updateUserInfo() {
+    setToken(localStorage.getItem('token') || '');
+    setUserId(localStorage.getItem('userId') || '');
+    setRole(localStorage.getItem('role') as UserTypes);
   }
 
-  updateToken = (newToken: string) => {
-    this.setState({ token: newToken });
-    localStorage.setItem('token', newToken);
-  };
+  const updateUserCallback = useCallback(
+    () => {
+      updateUserInfo();
+    },
+    [],
+  );
 
-  updateUserId = (newUserId: string) => {
-    this.setState({ userId: newUserId });
-    localStorage.setItem('userId', newUserId);
-  };
-
-  updateArtistView = (newArtistView: string) => {
-    this.setState({ artistView: newArtistView });
-  };
-
-  updateRole = (newRole: string) => {
-    this.setState({ role: newRole });
-    localStorage.setItem('role', newRole);
-  };
-
-  logout = () => {
-    localStorage.clear();
-    this.setState({
-      token: null,
-      userId: null,
-      role: null,
-    });
-    this.componentDidMount();
-  };
-
-  componentDidMount() {
-    this._isMounted = true;
+  useEffect(() => {
     if (localStorage.getItem('token')) {
-      this.setState({
-        token: localStorage.getItem('token'),
-        role: localStorage.getItem('role'),
-        userId: localStorage.getItem('userId'),
-      });
+      updateUserInfo();
     }
+  });
+
+  function logout() {
+    localStorage.clear();
+    setToken('');
+    setUserId('');
+    setRole(null);
+    window.location.reload();
   }
 
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.setBackground}>
-        <Router>
-          <Nav logout={this.logout} token={this.state.token} />
-          <div className={classes.wrapper}>
-            <Switch>
-              <Route exact path="/">
-                <HomeRoute logout={this.logout} token={this.state.token} userId={this.state.userId} />
-              </Route>
-              <Route exact path="/artistview">
-                <ArtistRoute
-                  updateArtistView={this.updateArtistView}
-                  logout={this.logout}
-                  token={this.state.token}
-                  userId={this.state.userId}
-                  role={this.state.role}
-                  artistView={this.state.artistView}
-                />
-              </Route>
-              <Route exact path="/artists">
-                <ViewArtists updateArtistView={this.updateArtistView} />
-              </Route>
-              <Route exact path="/login">
-                <LoginRoute
-                  logout={this.logout}
-                  userId={this.state.userId}
-                  token={this.state.token}
-                  updateToken={this.updateToken}
-                  updateUserId={this.updateUserId}
-                  updateRole={this.updateRole}
-                />
-              </Route>
-            </Switch>
-          </div>
-        </Router>
-      </div>
-    );
-  }
+  return (
+    <div className={classes.setBackground}>
+      <Router>
+        <Nav logout={() => logout} token={token} />
+        <div className={classes.wrapper}>
+          <Switch>
+            <Route exact path="/">
+              <HomeRoute
+                logout={() => logout}
+                token={token}
+                userId={userId}
+              />
+            </Route>
+            <Route exact path="/artistview">
+              <ArtistRoute
+                logout={() => logout}
+                userId={userId}
+                role={role}
+                artistView={artistView}
+              />
+            </Route>
+            <Route exact path="/artists">
+              <ViewArtists updateArtistView={setArtistView} />
+            </Route>
+            <Route exact path="/login">
+              <LoginRoute
+                logout={() => logout}
+                userId={userId}
+                token={token}
+                updateUserInfo={updateUserCallback}
+              />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </div>
+  );
 }
 
 export default withStyles(styles)(Main);
