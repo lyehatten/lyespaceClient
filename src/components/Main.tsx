@@ -1,5 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router, Switch, Route,
+} from 'react-router-dom';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Nav from './Nav';
 import LoginRoute from './ViewConductors/LoginRoute';
@@ -54,14 +56,13 @@ function Main(props: Props) {
     if (localStorage.getItem('token')) {
       updateUserInfo();
     }
-  });
+  }, [userId]);
 
   function logout() {
     localStorage.clear();
     setToken('');
     setUserId('');
     setRole(null);
-    window.location.reload();
   }
 
   return (
@@ -72,14 +73,12 @@ function Main(props: Props) {
           <Switch>
             <Route exact path="/">
               <HomeRoute
-                logout={() => logout}
                 token={token}
                 userId={userId}
               />
             </Route>
             <Route exact path="/artistview">
               <ArtistRoute
-                logout={() => logout}
                 userId={userId}
                 role={role}
                 artistView={artistView}
@@ -90,8 +89,6 @@ function Main(props: Props) {
             </Route>
             <Route exact path="/login">
               <LoginRoute
-                logout={() => logout}
-                userId={userId}
                 token={token}
                 updateUserInfo={updateUserCallback}
               />

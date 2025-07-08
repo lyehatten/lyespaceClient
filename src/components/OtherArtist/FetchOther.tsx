@@ -6,6 +6,7 @@ import Divider from '@material-ui/core/Divider';
 import ViewPosts from './ViewPosts';
 import ViewOther from './ViewOther';
 import { Post, ProfileData } from '../../types';
+import useQuery from '../../hooks';
 
 const styles = {
   root: {
@@ -22,9 +23,11 @@ interface Props extends WithStyles<typeof styles> {
 }
 
 function FetchOther(props: Props) {
+  const query = useQuery();
   const {
     classes, artistView, userRole,
   } = props;
+
   const [firstName, setFirstName] = useState<string>('Currently');
   const [lastName, setLastName] = useState<string>('Loading...');
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
@@ -33,7 +36,7 @@ function FetchOther(props: Props) {
 
   async function fetchUserInfo() {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${artistView}`);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/userInfo/${query.get('id')}`);
       const data = await res.json();
       setFirstName(data.firstName);
       setLastName(data.lastName);
@@ -47,11 +50,11 @@ function FetchOther(props: Props) {
 
   useEffect(() => {
     fetchUserInfo();
-  });
+  }, []);
 
   async function promoteUser() {
     try {
-      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/role/${artistView}`, {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/user/role/${query}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

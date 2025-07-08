@@ -76,7 +76,6 @@ function InfoEdit(props: Props) {
       const data = await res.json();
       if (data) {
         editToggle();
-        window.location.reload();
       }
     } catch (error) {
       console.log(error);

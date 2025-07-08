@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import { withStyles, WithStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
+import { useHistory } from 'react-router-dom';
 import Posts from './Posts/Posts';
 import InfoEdit from './InfoEdit';
 import InfoDisplay from './InfoDisplay';
@@ -29,11 +30,11 @@ const styles = {
 
 interface Props extends WithStyles<typeof styles> {
   userId: string | null,
-  logout: Function
 }
 
 function YourProfile(props: Props) {
-  const { classes, logout, userId } = props;
+  const history = useHistory();
+  const { classes, userId } = props;
 
   const [deleteState, setDeleteState] = useState<boolean>(false);
   const [firstName, setFirstName] = useState<string>('');
@@ -57,7 +58,7 @@ function YourProfile(props: Props) {
 
   useEffect(() => {
     getUserInfo();
-  });
+  }, [editView, posts]);
 
   async function refresh(id: string) {
     try {
@@ -80,9 +81,9 @@ function YourProfile(props: Props) {
       });
       const data = await res.json();
       if (data) {
+        localStorage.clear();
         setDeleteState(false);
-        logout();
-        window.location.reload();
+        history.push('/login');
       }
     } catch (error) {
       console.log(error);
@@ -158,7 +159,7 @@ function YourProfile(props: Props) {
           <Button onClick={() => setDeleteState(false)} color="primary">
             Cancel
           </Button>
-          <Button onClick={() => handleDelete} color="secondary" autoFocus>
+          <Button onClick={() => handleDelete()} color="secondary" autoFocus>
             Delete Account
           </Button>
         </DialogActions>

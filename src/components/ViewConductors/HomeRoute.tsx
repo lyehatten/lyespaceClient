@@ -5,17 +5,16 @@ import YourProfile from '../YourProfile/YourProfile';
 type Props = {
   token: string | null,
   userId: string | null,
-  logout: Function
 };
 
 export default function HomeRoute(props: Props) {
-  const { token, logout, userId } = props;
+  const { token, userId } = props;
 
   return (
     <div>
       {
           token
-            ? <YourProfile logout={logout} userId={userId} />
+            ? <YourProfile userId={userId} />
             : <HomePage />
         }
     </div>

@@ -1,23 +1,29 @@
 import React from 'react';
+import { Redirect, useLocation } from 'react-router-dom';
 import Auth from '../Auth/Auth';
-import YourProfile from '../YourProfile/YourProfile';
 
 type Props = {
   token: string | null,
   updateUserInfo: () => void
-  userId: string | null,
-  logout: Function
 };
 
 export default function LoginRoute(props: Props) {
+  const location = useLocation();
   const {
-    logout, userId, token, updateUserInfo,
+    token, updateUserInfo,
   } = props;
+
   return (
     <div>
       {
           token
-            ? <YourProfile logout={() => logout} userId={userId} />
+            ? (
+              <Redirect to={{
+                pathname: '/',
+                state: { from: location },
+              }}
+              />
+            )
             : (
               <Auth
                 updateUserInfo={updateUserInfo}

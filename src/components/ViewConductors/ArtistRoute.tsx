@@ -6,18 +6,17 @@ import { UserTypes } from '../../types';
 type Props = {
   userId: string | null,
   artistView: string | null,
-  logout: Function,
   role: UserTypes | null,
 };
 
 export default function ArtistRoute(props: Props) {
   const {
-    userId, artistView, logout, role,
+    userId, artistView, role,
   } = props;
   return (
     <div>
       {userId === artistView
-        ? <YourProfile logout={logout} userId={userId} />
+        ? <YourProfile userId={userId} />
         : (
           <FetchOther
             userRole={role}

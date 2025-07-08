@@ -67,7 +67,7 @@ function ArtistDisplay(props: PropTypes) {
               </Typography>
               )
             }
-            <Link to="/artistview" style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Link to={`/artistview?id=${artist.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>
               <Button
                 variant="contained"
                 color="primary"

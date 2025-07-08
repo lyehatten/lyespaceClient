@@ -38,7 +38,7 @@ function ViewPost(props: Props) {
       });
       const data = await res.json();
       if (data) {
-        window.location.reload();
+        refresh(userId);
       }
     } catch (error) {
       console.log(error);
@@ -58,6 +58,7 @@ function ViewPost(props: Props) {
               <EditPost
                 userId={userId}
                 post={post}
+                editToggle={() => setEditToggle(!editToggle)}
                 refresh={refresh}
               />
             ) : (

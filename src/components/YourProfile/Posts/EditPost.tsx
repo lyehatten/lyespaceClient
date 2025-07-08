@@ -13,11 +13,12 @@ interface Props extends WithStyles<typeof styles> {
   post: Post,
   refresh: Function,
   userId: string | null,
+  editToggle: Function
 }
 
 function EditPost(props: Props) {
   const {
-    post, refresh, userId, classes,
+    post, refresh, userId, classes, editToggle,
   } = props;
 
   const [newPost, setNewPost] = useState<string>(post.post);
@@ -37,6 +38,7 @@ function EditPost(props: Props) {
       const data = await res.json();
       if (data) {
         refresh(userId);
+        editToggle();
       }
     } catch (err) {
       console.log(err);

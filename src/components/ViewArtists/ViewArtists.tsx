@@ -42,7 +42,7 @@ function ViewArtists(props: Props) {
   useEffect(() => {
     fetchArtistInfo();
     return () => {};
-  });
+  }, []);
   return (
     <div>
       <Typography className={classes.root} variant="h2">
